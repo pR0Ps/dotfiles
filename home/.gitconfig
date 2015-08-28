@@ -24,6 +24,7 @@
     fix = !sh -c 'git commit -m \"fixup! `git rev-parse HEAD`\"' -
     amend = commit --amend --no-edit
     diffc = diff --cached
+    checkoutr = checkout
 [mergetool "gvimdiff3"]
     cmd = gvim -f -d -c \"wincmd J\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
 [mergetool "vimdiff3"]
