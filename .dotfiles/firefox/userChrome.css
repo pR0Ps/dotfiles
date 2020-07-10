@@ -1,0 +1,25 @@
+/* Customize the UI of Firefox */
+
+/* Hide tabs in top bar */
+#tabbrowser-tabs {
+  visibility: collapse !important;
+}
+
+/*
+Remove the TabsToolbar completely when not using it for the platform's window controls
+Use the `browser.tabs.drawInTitlebar` setting in about:config to change this
+*/
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+  visibility: collapse !important;
+}
+
+/* Hide the sidebar header when it's showing tabs
+Extension ids:
+ - Tree Style Tab: treestyletab_piro_sakura_ne_jp-sidebar-action
+ - Sidebery: _3c078156-979c-498b-8990-85f7987dd929_-sidebar-action
+*/
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header,
+#sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"] #sidebar-header
+{
+  display: none;
+}
