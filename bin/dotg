@@ -1,0 +1,137 @@
+#!/bin/sh
+# dotg: manage dotfiles with git
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+####################
+# configuration
+
+# where will be the git repository with your dotfiles
+GIT_DIR=~/.dotfiles.git
+# a dir in your $PATH so that you can use dotg easily (it will be copied here)
+BIN_DIR=~/bin
+# your remote repository to clone from, if not specified on the command line
+REMOTE=
+
+####################
+# TODO: add a "no-git" option/command to just extract the files from the remote without git
+#
+# do not touch below this line
+set -e
+
+DOTG="$BIN_DIR/dotg"
+
+usage() {
+	echo "usage: `basename $0` <command> [args...]"
+	echo
+	echo "Where <command> is either:"
+	echo "   init-dotfiles            Initialize the dotfiles repository"
+	echo "   clone-dotfiles [<repo>]  Clone a remote dotfiles repository"
+	echo "   <other command>          A command passed to git(1)"
+	echo
+	echo "Local dotfiles repository is set to $GIT_DIR"
+}
+
+if [ -z "$1" ]; then
+	usage
+	exit 1
+fi
+
+GIT_WORK_TREE=~
+# we can not export GIT_WORK_TREE before having initialized the repo,
+# so do it later when needed
+export GIT_DIR
+
+check_existing_repo() {
+	if [ -d "$GIT_DIR" ]; then
+		echo "Directory \"$GIT_DIR\" already exists; not creating the"\
+			"repository here."
+		exit 2
+	fi
+}
+
+init_dotfiles() {
+	check_existing_repo
+
+	git init --bare
+	git config status.showUntrackedFiles no
+
+	# copy dotg to the home's bin directory
+	if [ ! "$0" -ef "$DOTG" ]; then
+		mkdir -p $BIN_DIR
+		cp "$0" "$DOTG"
+	fi
+
+	export GIT_WORK_TREE
+	# add dotg to the repo, as initial commit
+	git add "$DOTG"
+	git commit -m "Import dotg"
+}
+
+clone_dotfiles() {
+	# take the remote repository as first argument
+	# you can pass further arguments, like --branch some-specific-branch,
+	# but you MUST pass them after the repository name, if given
+
+	check_existing_repo
+
+	case "$1" in
+		-*|"") # some options or empty
+			if [ -n "$REMOTE" ]; then
+				ARGS="$@ $REMOTE"
+			else
+				ARGS="$@"
+			fi
+			;;
+		*) # specific repo
+			ARGS="$@"
+			;;
+	esac
+
+	if [ -z "$ARGS" ]; then
+		echo "You must specify a repository to clone from,"\
+			"as an argument or in this script's REMOTE variable."
+		exit 3
+	fi
+
+	git clone -n $ARGS "$GIT_DIR"
+	# make it bare-like
+	mv "$GIT_DIR/.git"/* "$GIT_DIR"
+	rmdir "$GIT_DIR/.git"
+	git config status.showUntrackedFiles no
+
+	export GIT_WORK_TREE
+	# to work around some git not able to create parent directories when
+	# non-existent
+	mkdir -p "$BIN_DIR"
+	git checkout HEAD -- "$DOTG"
+}
+
+case "$1" in
+	-h|--help)
+		usage
+		;;
+	init-dotfiles)
+		init_dotfiles
+		;;
+	clone-dotfiles)
+		shift
+		clone_dotfiles "$@"
+		;;
+	*)
+		export GIT_WORK_TREE
+		exec git "$@"
+		;;
+esac
+
