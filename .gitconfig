@@ -1,0 +1,41 @@
+[alias]
+    amend = commit --amend --no-edit
+    autosquash = !GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash
+    diffc = diff --cached
+    fixup = commit --fixup
+    plog = log --graph --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+[color "status"]
+    untracked = cyan
+[diff]
+    submodule = log  # Show a log of added/removed commits for a changed submodule
+[fetch]
+    prune = true
+    pruneTags = true
+[log]
+    follow = true  # Assume --follow when given a single path
+[merge]
+    # Use a diff3-styled vimdiff
+    guitool = gvimdiff3
+    tool = vimdiff3
+[mergetool]
+    prompt = false
+[pull]
+    ff = only
+[push]
+    default = simple
+    followTags = true
+[rebase]
+    autosquash = true
+    autostash = true
+[rerere]
+    autoUpdate = true
+    enabled = true
+[stash]
+    showPatch = true
+[status]
+    submoduleSummary = true
+[submodule]
+    recurse = true
+[user]
+    email = carey@cmetcalfe.ca
+    name = Carey Metcalfe

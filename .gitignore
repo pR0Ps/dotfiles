@@ -1,0 +1,15 @@
+# Globally ignore OS junk
+
+# macOS
+.DS_Store*
+._*
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+
+# Linux
+.Trash-*
+
+# Windows
+Thumbs.db
+desktop.ini
