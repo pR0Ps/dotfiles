@@ -1,0 +1,13 @@
+# Don't change history when modifying past commands
+set revert-all-at-newline on
+
+# Fill any partial completions, if no parital completions are available, show all
+# aka: tab to complete as far as possible, tab again to list available options
+set show-all-if-unmodified on
+
+# Use colors when displaying autocomplete options
+set colored-stats on
+
+# Display the current common prefix as a different color when autocompleting
+# Makes it much easier to see the options for next characters
+set colored-completion-prefix on
