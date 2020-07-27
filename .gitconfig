@@ -4,6 +4,9 @@
     diffc = diff --cached
     fixup = commit --fixup
     plog = log --graph --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+
+    # Interactively pick commit sha(s)
+    isha = !git rev-parse && git log --pretty=oneline | fzf --with-nth 2.. --multi --no-sort --preview='git show --color=always {1}' | cut -d' ' -f1
 [color "status"]
     untracked = cyan
 [diff]
