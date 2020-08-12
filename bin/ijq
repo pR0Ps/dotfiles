@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# An interactive “jq” that previews the results of your expressions
+# as you type, allows saving/loading intermediate expressions, and
+# prints out the final expression when it exits.
+# See https://asciinema.org/a/349330 for a demo.
+
+# TODO: Better handling of piped input, multiple args, etc
+
+cmds=(".")
+result=""
+while true; do
+    result="$(
+        printf '%s\n' "${cmds[@]}" |\
+        fzf --bind "tab:replace-query" --prompt="jq> " --query="$result"\
+            --phony --print-query --tac --no-sort --preview-window "up:80%"\
+            --preview "jq -C {q} \"$1\""
+    )"
+
+    # On error or ESC print the last query and exit
+    if [ "$?" -gt 1 ]; then
+        echo "jq '${cmds[${#cmds[@]}-1]}' \"$1\""
+        exit 0
+    fi
+
+    # Extract the first line (the query), trim any whitespace, and
+    # add it to the list of past commands (if not a dupe)
+    result="$(echo "$result" | head -n 1 | awk '{$1=$1};1')"
+    if [ "$result" != "${cmds[${#cmds[@]}-1]}" ]; then
+        cmds+=("$result")
+    fi
+done
