@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Creates a temporary python virtual environment and enters it
+# When deactivating/exiting, the venv is deleted
+# Optionally takes a binary to use as the venv's python interpreter (default python3)
+
+set -eu
+
+if [ -n "${VIRTUAL_ENV:-}" ]; then
+    echo "ERROR: Already in a virtual environment ( $VIRTUAL_ENV )"
+    exit 1
+fi
+
+python="${1:-python3}"
+venv="tempvenv"
+
+tmp=$(mktemp --directory)
+trap 'rm -rf "$tmp"' EXIT
+
+# Prefer virtualenv (faster, compatible with python2),
+# fall back to python with isolation (python3.4+),
+# fall back to non-isolated python,
+# Otherwise error out
+virtualenv --quiet --python "$python" "$tmp/$venv" &>/dev/null || \
+    "$python" -I -m venv "$tmp/$venv" &>/dev/null || \
+    "$python" -m venv "$tmp/$venv" &>/dev/null || \
+    (echo "Failed to create venv with interpreter $python" && exit 1)
+
+# Run a non-login shell that sources the venv
+bash --rcfile <( echo "
+source $HOME/.bashrc 2>/dev/null || source /etc/bashrc 2>/dev/null
+source \"$tmp/$venv/bin/activate\" || exit 1
+alias deactivate=exit
+echo '==============================='
+echo \"Now in temporary $python venv\"
+echo \"$tmp/$venv\"
+echo '==============================='
+" )
