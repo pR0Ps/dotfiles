@@ -1,0 +1,56 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+    echo "Group photos into folders by DateTimeOriginal"
+    echo ""
+    echo "Usage: $(basename "$0") <dir>"
+    exit 1
+fi
+
+
+# Pictures within 5 minutes are considered part of the same group
+limit=300
+
+# Minimum number of items there needs to be in order to be considered a group
+min=2
+
+# Initial settings
+group=""
+prev=0
+count=0
+
+# Extract date taken and sort by it
+cd "$1"
+echo "Gathering date exif data and moving files..."
+
+# These are exiftool variables, not shell variables - silence warning
+# shellcheck disable=2016
+exiftool -m -d "%s" -p '$DateTimeOriginal|$FileName' -DateTimeOriginal . | sort | while IFS='|' read -r curr file; do
+    if [ "$file" == "" ] || [ "$curr" == "" ]; then
+        # Failed to extract data - ignore it
+        continue
+    fi
+
+    # Check the time difference between the current and previous file
+    diff=$(echo "$curr - $prev" | bc)
+    if [ "$diff" -gt "$limit" ]; then
+        # Difference is too big, start a new group
+
+        if [ "$group" != "" ] && [ $count -lt $min ]; then
+            # A previous group exists and has less than the minimum number of items in it - move them back
+            mv -i "$group"/* .
+            rmdir "$group"
+        fi
+        count=0
+        group="group_${curr}"
+        mkdir "$group"
+    fi
+
+    # Move the file into the group
+    ((count++))
+    mv -i "$file" "$group"/
+    prev="$curr"
+done
+echo "Done!"

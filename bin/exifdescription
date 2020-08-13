@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 2 ]; then
+    echo "Sets the description of media files"
+    echo ""
+    echo "Usage: $(basename "$0") <description> <files>"
+    exit 1
+fi
+
+desc="$1"
+shift
+exiftool -use mwg -overwrite_original -Description="$desc" "$@"

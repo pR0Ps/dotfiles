@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+    echo "Sets the creation data of the file to the date the photo was taken"
+    echo ""
+    echo "Usage: $(basename "$0") <files>"
+    exit 1
+fi
+
+# These are exiftool variables, not shell variables - silence warning
+# shellcheck disable=2016
+exiftool '-DateTimeOriginal>FileModifyDate' -if '$DateTimeOriginal' "$@"

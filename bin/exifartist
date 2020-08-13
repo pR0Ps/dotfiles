@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 2 ]; then
+    echo "Sets the artist of media files"
+    echo ""
+    echo "Usage: $(basename "$0") <artist> <files>"
+    exit 1
+fi
+
+artist="$1"
+shift
+exiftool -use mwg -overwrite_original -Artist="$artist" "$@"
