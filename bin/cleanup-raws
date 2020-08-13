@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+    echo "Delete raw (CR2, ORF) files that don't have a matching JPG preview"
+    echo ""
+    echo "Usage: $(basename "$0") <dir>"
+    exit 1
+fi
+
+cd "$1"
+delete="_to_delete"
+mkdir "$delete" # Bail if it already exists
+
+shopt -s nullglob
+for x in *.CR2 *.ORF; do
+    [ -e "${x%.*}.JPG" ] || mv "$x" "$delete"
+done
+echo "Cleaned up $(ls "$delete" | wc -l) files"
+rmdir "$delete" 2> /dev/null || :
