@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Requires: audiowaveform (https://github.com/bbc/audiowaveform), metaflac, sox
+
+zoom_start=60
+zoom_duration=4
+zoom_end=$((zoom_start + zoom_duration))
+
+if [ $# -lt 1 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Generates spectrogram and waveform images from flac files"
+    echo ""
+    echo "For each type, an image of the entire file will be made, as well as a"
+    echo "more detailed analysis of $zoom_duration seconds of audio starting $zoom_start seconds in."
+    echo ""
+    echo "The generated files will have the same name as the input files"
+    echo "with extra identifiers appended."
+    echo ""
+    echo "usage: $(basename "$0") file [file ..]"
+    echo ""
+    echo "positional arguments:"
+    echo "  file                The flac file(s) to process"
+    exit 0
+fi
+
+exists(){
+    command -v "$1" >/dev/null 2>/dev/null
+}
+
+if ! exists sox; then
+    echo "WARNING: Not generating spectograms - missing required tool 'sox'"
+fi
+if ! exists metaflac || ! exists audiowaveform; then
+    echo "WARNING: Not generating waveforms - missing required tools 'metaflac' and/or 'audiowaveform'"
+fi
+
+count=0
+for x in "$@"; do
+    ((count++))
+    echo "Processing file $count/$#: '$x'"
+
+    # Generate spectrograms
+    if exists sox; then
+        sox "$x" -n remix 1 spectrogram -X 500 -y 1025 -z 120 -w Kaiser -S "$zoom_start" -d "$zoom_duration" -o "${x}_spectral_zoom.png"
+        sox "$x" -n remix 1 spectrogram -x 3000 -y 513 -z 120 -w Kaiser -o "${x}_spectral.png"
+    fi
+
+    # Get audio length and generate waveforms
+    if exists metaflac && exists audiowaveform; then
+        audiowaveform -i "$x" -o "${x}_waveform_zoom.png"  -w 2000 -h 1024 -s "$zoom_start" -e "$zoom_end" > /dev/null
+        len=$(metaflac --show-total-samples --show-sample-rate "$x" | tr '\n' ' ' | awk '{print int($1/$2)}')
+        audiowaveform -i "$x" -o "${x}_waveform.png" -w 3000 -h 512 -s 0 -e "$len" > /dev/null
+    fi
+done
+
+echo "Done!"
