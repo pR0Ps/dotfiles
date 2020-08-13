@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# A small wrapper around '7z x'. See --help
+
+set -e
+
+files=()
+subdir=0
+curdir=0
+delete=0
+if [ $# -lt 1 ]; then
+    showhelp=1
+else
+    showhelp=0
+fi
+
+while [[ $# -gt 0 ]]; do
+
+    case "$1" in
+        -h|--help)
+            showhelp=1
+            ;;
+        -s|--subdir)
+            subdir=1
+            ;;
+        -c|--curdir)
+            curdir=1
+            ;;
+        -d|--delete)
+            delete=1
+            ;;
+        -*)
+            echo "ERROR: Unknown option '$1'"
+            echo ""
+            showhelp=1
+            ;;
+        *)
+            files+=("$1")
+            ;;
+    esac
+    shift
+done
+
+if ((curdir)) && ((subdir)); then
+    echo "ERROR: -s/--subdir and -c/--curdir cannot both be specified"
+    echo ""
+    showhelp=1
+fi
+
+if ((showhelp)); then
+    echo "Wrapper for extracting compressed files using 7z"
+    echo ""
+    echo "Improvements over '7z x':"
+    echo " - Individually extracts all archives given as positional args"
+    echo " - Extracts to directories local to the archive (not the cwd)"
+    echo " - Automatically creates a subfolder if the archive has more than 1 top level file/folder in it"
+    echo " - Can delete archives after successful extraction"
+    echo ""
+    echo "Flags:"
+    echo "  -h --help     Show this text"
+    echo "  -d --delete   Delete archives after successful extraction"
+    echo "  -s --subdir   Always extract archives to a subdirectory (default for multi-file/folder archives)"
+    echo "  -c --curdir   Always extract archives to the directory the archive is in (default for single file/folder archives)"
+    echo ""
+    echo "Usage:"
+    echo "$(basename "$0") [-h | --help] [-d | --delete] [-s | --subdir | -c | --curdir ] <files>"
+    echo ""
+    exit 0
+fi
+
+# Note: 7z's -ba switch is undocumented - it supresses the headers and copyright spam
+for x in "${files[@]}"; do
+    if ! [ -f "$x" ]; then
+        echo "WARNING: Skipping '$x' - not a file"
+        continue
+    fi
+    if ! [ -r "$x" ]; then
+        echo "WARNING: Skipping '$x' - not readable"
+        continue
+    fi
+
+    # Get number of top level files/folders (get all paths up to first slash, count uniques)
+    toplevels="$(7z l -ba -slt "$x" 2>/dev/null | sed -n -e 's/^Path = \([^\/]*\).*$/\1/p' | sort -u | wc -l)"
+    if [ "$toplevels" -eq 0 ]; then
+        echo "WARNING: Skipping '$x' - failed to parse archive file list (non-archive? corrupt?)"
+        continue
+    fi
+
+    # Asked for subdir or ( >1 toplevel file/folder and didn't ask for current dir)
+    if ((subdir)) || [ "$toplevels" -gt 1 ] && ! ((curdir)); then
+        outdir="${x%.*}"
+        # Don't allow overwriting output dir
+        if ! mkdir "$outdir" 2>/dev/null; then
+            echo "WARNING: Skipping '$x' - output dir '$outdir' already exists"
+            continue
+        fi
+    else
+        outdir=$(dirname "$x")
+    fi
+
+    echo "Extracting '$x' to '$outdir':"
+    echo -n "-------------------------------------"
+    if 7z x -ba -o"$outdir" "$x"; then
+        # Extracted properly - clean up
+        ((delete)) && rm "$x"
+    else
+        # Clean up empty output directory if it exists
+        rmdir "$outdir" 2>/dev/null || :
+    fi
+    echo "-------------------------------------"
+    echo ""
+done
