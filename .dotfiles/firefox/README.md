@@ -31,6 +31,7 @@ Extensions
 ----------
 - https://addons.mozilla.org/firefox/addon/clearurls
 - https://addons.mozilla.org/firefox/addon/cliget
+- https://addons.mozilla.org/firefox/downthemall
 - https://addons.mozilla.org/firefox/addon/drag-select-link-text
 - https://addons.mozilla.org/firefox/addon/feed-preview
 - https://addons.mozilla.org/firefox/addon/multi-account-containers
@@ -41,6 +42,7 @@ Extensions
 - https://addons.mozilla.org/firefox/addon/styl-us
 - https://addons.mozilla.org/firefox/addon/tab_search
 - https://addons.mozilla.org/firefox/addon/temporary-containers
+- https://addons.mozilla.org/firefox/addon/to-google-translate/
 - https://addons.mozilla.org/firefox/addon/ublacklist
 - https://addons.mozilla.org/firefox/addon/ublock-origin
 - https://addons.mozilla.org/firefox/addon/universal-bypass/
