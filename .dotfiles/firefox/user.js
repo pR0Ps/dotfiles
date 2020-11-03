@@ -76,6 +76,9 @@ user_pref("browser.shell.checkDefaultBrowser", false);
 user_pref("browser.newtabpage.enabled", false);
 user_pref("browser.newtab.url", "about:blank");
 
+// Increase the amount of history that is retained
+user_pref("places.history.expiration.max_pages", 10000000);
+
 
 // ----- Privacy/Reduce unwanted traffic -----
 // Disable sending the URL of the website where a plugin crashed
