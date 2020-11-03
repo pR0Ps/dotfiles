@@ -230,7 +230,11 @@ command Sudow execute "write !sudo tee >/dev/null '%'" | edit!
 command StripTWS :call s:preserve_context("%s/\\s\\+$//e")
 
 "Format JSON nicely
-command FormatJSON :%! python -m json.tool
+if executable('jq')
+    command FormatJSON :%! jq .
+else
+    command FormatJSON :%! python -m json.tool
+endif
 
 "Show the syntax classes of the text under the cursor
 "(Useful for debugging theme issues)
