@@ -9,7 +9,10 @@
     isha = !git rev-parse && git log --pretty=oneline | fzf --with-nth 2.. --multi --no-sort --preview='git show --color=always {1}' | cut -d' ' -f1
 [color "status"]
     untracked = cyan
+[commit]
+    verbose = true  # Show the current diff in the commit message template
 [diff]
+    algorithm = histogram  # Slightly slower for large diffs, but generally more readable
     submodule = log  # Show a log of added/removed commits for a changed submodule
 [fetch]
     prune = true
@@ -23,7 +26,7 @@
 [mergetool]
     prompt = false
 [pull]
-    ff = only
+    ff = only  # Don't merge or rebase by default when pulling
 [push]
     default = simple
     followTags = true
