@@ -1,0 +1,129 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+    echo "Write a disk image to a bootable USB on macOS"
+    echo ""
+    echo "Usage: $(basename "$0") <iso file> [diskname]"
+    echo ""
+    echo "Notes:"
+    echo " - If diskname is not provided, it will be detected"
+    echo " - Will ask for confirmation before anything is written to the disk"
+    echo " - Might not properly write Windows images (macOS and Linux are fine)"
+    exit 1
+fi
+
+externaldisks() {
+    diskutil list -plist external | \
+        plutil -extract 'WholeDisks' xml1 -o - - | \
+        sed -n 's#^[[:space:]]*<string>\(.*\)</string>$#\1#p'
+}
+
+showdisk(){
+    echo "------------------------------------------------------------------------------"
+    diskutil list "/dev/$1"
+    echo "------------------------------------------------------------------------------"
+}
+
+file="$1"
+diskname="${2:-}"
+
+# Get file size (exit if the file couldn't be read)
+if ! duout="$(du -h "$file")"; then
+    exit 1
+fi
+size="$(echo "$duout" | cut -f1)"
+
+# If no diskname was provided then detect it
+if [ -z "$diskname" ]; then
+    echo "Detecting diskname..."
+    read -r -p "Make sure the USB is UNPLUGGED and hit enter: "
+    sleep 1
+    olddisks="$(externaldisks)"
+
+    read -r -p "Plug in the USB and hit enter: "
+    sleep 5  # Give a chance for the system to recognize it
+
+    if newdisks="$(echo "$olddisks" | diff --changed-group-format='%>' --unchanged-group-format='' - <( externaldisks ))"; then
+        echo "No plugged in disks were detected - exiting"
+        exit 1
+    fi
+
+    if [ "$(echo "$newdisks" | wc -l)" -eq 1 ]; then
+        # One new disk detected, use it
+        echo "Detected diskname '$newdisks'"
+        diskname="$newdisks"
+    else
+        # Multiple detected, make the user choose
+        echo "Detected the following new disks:"
+        while IFS= read -r d; do
+            echo ""
+            echo "$d"
+            showdisk "$d"
+        done <<< "$newdisks"
+        echo ""
+        read -r -p "Which of the above disks do you want to write? " diskname
+    fi
+
+fi
+
+# strip off leading '/dev/' if one was provided
+diskname="${diskname#/dev/}"
+
+if ! externaldisks | grep -q "$diskname"; then
+    echo "ERROR: disk '/dev/$diskname' not detected"
+    exit 1
+elif ! [ -b "/dev/$diskname" ]; then
+    echo "ERROR: disk '/dev/$diskname' is not a block device"
+    exit 1
+fi
+
+echo ""
+echo "You are about to write '$(basename "$file")' ($size) to the following disk:"
+showdisk "$diskname"
+echo ""
+
+echo "---===THIS WILL ERASE ALL DATA ON THE ABOVE DISK===---"
+read -r -p "ARE YOU ABSOLUTELY SURE? [y/N] " prompt
+if [ "$prompt" != "y" ]; then
+    exit 0
+fi
+
+echo "Unmounting disk..."
+diskutil unmountDisk "/dev/$diskname"
+
+# TODO: See if this can be done with a named pipe to avoid writing the entire
+#       converted image to the temp dir before writing it to the USB
+
+# Create temp dir to work in and delete it when the script exits
+tmp=$(mktemp --directory)
+trap 'rm -rf "$tmp"' EXIT
+
+echo ""
+echo "Converting iso to image for writing..."
+hdiutil convert -format UDRW -o "$tmp/image.dmg" "$file"
+
+# Prefer unbuffered devices for speed
+if [ -c "/dev/r$diskname" ]; then
+    of="/dev/r$diskname"
+else
+    of="/dev/$diskname"
+fi
+
+echo ""
+echo "Writing image to disk (may prompt for a password)..."
+
+# Handle both BSD and coreutils dd
+if strings "$(which dd)" | grep -q "GNU coreutils"; then
+    sudo dd if="$tmp/image.dmg" of="$of" bs=1M status=progress
+else
+    sudo dd if="$tmp/image.dmg" of="$of" bs=1m
+fi
+
+echo ""
+echo "Ejecting disk..."
+diskutil eject "/dev/$diskname"
+
+echo ""
+echo "Done! The USB can be removed."
