@@ -81,6 +81,12 @@ user_pref("layout.spellcheckDefault", 2);
 // Increase the amount of history that is retained
 user_pref("places.history.expiration.max_pages", 10000000);
 
+// When loading media, always try to load the entire file immediately
+// Increase the cache size to reduce the likelihood of a huge file evicting everything else
+user_pref("media.cache_readahead_limit", 86400); // amount of future media to preload (1 day in seconds)
+user_pref("media.cache_resume_threshold", 86400); // resume loading when less seconds than this of future media is loaded
+user_pref("media.cache_size", 1024000); // Increase on-disk media cache size to 1GB (default is 500MB)
+
 
 // ----- Privacy/Reduce unwanted traffic -----
 // Disable sending the URL of the website where a plugin crashed
