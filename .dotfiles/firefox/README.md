@@ -12,7 +12,7 @@ ln -s ~/.dotfiles/firefox/user.js .
 mkdir -p chrome
 ln -s ~/.dotfiles/firefox/userChrome.css chrome/
 
-# Disable collecting HSTS sites (replaced with the HTTPZ addon)
+# Disable collecting HSTS sites (replaced by enabling https-only mode)
 : > SiteSecurityServiceState.txt
 chmod a-w SiteSecurityServiceState.txt
 
@@ -36,7 +36,6 @@ Extensions
 - https://addons.mozilla.org/firefox/addon/feed-preview
 - https://addons.mozilla.org/firefox/addon/multi-account-containers
 - https://addons.mozilla.org/firefox/addon/google-search-link-fix
-- https://addons.mozilla.org/firefox/addon/httpz
 - https://addons.mozilla.org/firefox/addon/py3direct
 - https://addons.mozilla.org/firefox/addon/sidebery
 - https://addons.mozilla.org/firefox/addon/styl-us

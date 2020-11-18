@@ -151,9 +151,11 @@ user_pref("network.proxy.socks_remote_dns", true);
 // (don't allow links to change the page they were opened from)
 user_pref("dom.targetBlankNoOpener.enabled", true);
 
-// Disable HSTS (replaced with the HTTPZ addon)
-// HTTPZ automatically redirects HTTP -> HTTPS for every site.
-// If a site is not connectable over HTTPS, it provides a *choice* on how to proceed.
+// Automatically redirect to HTTPS versions of websites
+user_pref("dom.security.https_only_mode", true);
+
+// Disable HSTS
+// Disabling this provides a *choice* on how to proceed if a site isn't workng over HTTPS
 // There is no way to tell Firefox to not collect HSTS-enabled sites as it discovers them.
 // A workaround is to truncate `<profile>/SiteSecurityServiceState.txt` and make it read-only.
 user_pref("network.stricttransportsecurity.preloadlist", false);
