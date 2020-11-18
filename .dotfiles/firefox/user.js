@@ -69,6 +69,10 @@ user_pref("browser.newtab.url", "about:blank");
 // Don't check if FF is the default browser
 user_pref("browser.shell.checkDefaultBrowser", false);
 
+// Don't show the picture-in-picture toggle
+// (still available on right-click or shift + right-click)
+user_pref("media.videocontrols.picture-in-picture.video-toggle.enabled", false);
+
 // Disable pasting and loading URLs with middle mouse button
 user_pref("middlemouse.contentLoadURL", false);
 
