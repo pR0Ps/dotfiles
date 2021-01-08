@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+    echo "Transfer exif Artist data from JPG previews to matching raw (CR2, ORF) files"
+    echo ""
+    echo "Usage: $(basename "$0") <dir>"
+    exit 1
+fi
+
+# Uses the exifartist script to do the modifications
+if ! command -v exifartist >/dev/null; then
+    echo "ERROR: exifartist must be on your path"
+    exit 1
+fi
+
+cd "$1"
+count=0
+
+# TODO: Make more efficient
+# shellcheck disable=2016
+while IFS='|' read -r file artist; do
+    for ext in 'CR2' 'ORF'; do
+        rawfile="${file%.*}.${ext}"
+        if [ -e "$rawfile" ]; then
+            ((count++))
+            exifartist "$artist" "$rawfile"
+            break
+        fi
+    done
+done < <(exiftool -ignoreMinorErrors -dateFormat "%s" -printFormat '$FileName|$Artist' -if '$Artist' -- *.JPG | sort )
+echo "Transferred the artist data of $count images"
