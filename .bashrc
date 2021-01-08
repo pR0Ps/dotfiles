@@ -26,11 +26,11 @@ PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 shopt -s histappend
 
 # Pruning
-export HISTIGNORE="cd:ls:vim:exit:history:[bf]g:%*:clear:reset:pwd:htop"
+export HISTIGNORE="cd:ls:exit:[bf]g:%*:clear:reset:deactivate"
 export HISTCONTROL=ignoredups:ignorespace  # no subsquent duplicates, ignore commands starting with " "
 
 # Amount of history to store
-export HISTSIZE=10000        # Load a large amount of history into memory for Ctrl+r searching
+export HISTSIZE=50000        # Load a large amount of history into memory for Ctrl+r searching
 export HISTFILESIZE=99999999 # "Unlimited" number of lines in history files (https://lists.gnu.org/archive/html/bug-bash/2009-02/msg00108.html)
 
 # Single line history wherever possible
@@ -57,7 +57,8 @@ else
 fi
 
 # Define a function to switch back into an existing session
-# Useful in cases where a serminal is accidentally closed
+# Useful in cases where a terminal is accidentally closed
+# TODO: Easier discovery of past sessions
 histswitch(){
     if [ ! -r "$1" ]; then
         echo "Unable to find history session '$1'"
@@ -71,8 +72,7 @@ histswitch(){
     history -a
     export HISTFILE="$1"
     history -c
-    __load_bash_history "$1"
-    echo "Switched to history session '$1'"
+    __load_bash_history "$1" && echo "Switched to history session '$1'"
 }
 __histswitch_complete(){
     # NOTE: Will choke on spaces, doesn't expand shell variables properly
@@ -84,38 +84,37 @@ complete -o default -F __histswitch_complete histswitch
 
 # Load past history from across multiple files up to $HISTSIZE entries
 __load_bash_history() {
-    local first="${1:-}"  # optional param: history file to start at
+    # optional param: history file to start at
 
     # Collect up all history files (will be sorted by date)
     local histfiles=("$HISTDIR"/*/*/*/*.hist)
-    [ ${#histfiles[@]} -gt 0 ] || return
 
-    # Find the index to start at in order to load $HISTSIZE lines
-    local lines=0
-    local start=${#histfiles[@]}-1
-    local num=0
-    for (( ; start >= 0 ; start-- )) ; do
-        # Skip files until $first if it was provided
-        if [ "$num" -eq 0 ] && [ -n "$first" ] && [ ! "$first" -ef "${histfiles[start]}" ]; then
-            continue
+    local num=${#histfiles[@]}
+    [ "$num" -gt 0 ] || return
+
+    if [ -n "$1" ]; then
+        # Find the index of the specified history file
+        # (search from end to optimize for loading recent sessions)
+        for (( num=${#histfiles[@]}-1; num >= 0 ; num-- )) ; do
+            if [ "$1" -ef "${histfiles[num]}" ]; then
+                ((num+=1))
+                break
+            fi
+        done
+        if [ "$num" -lt 0 ]; then
+            echo "History file $1 not found!"
+            return 1
         fi
-        # Try to get the required number of lines from the file
-        # Add the actual amount available to the total
-        ((lines += $(head --lines $((HISTSIZE - lines)) "${histfiles[start]}" | wc -l)))
-        ((num+=1))
-        [ "$lines" -ge "$HISTSIZE" ] && break
-    done
-    # When there isn't enough history available start will be -1 which will mess up array slicing
-    [ "$start" -lt 0 ] && start=0
+    fi
 
-    # Merge the selected history files and load the last $HISTSIZE lines from it
+    # Merge the history files and load the last $HISTSIZE lines from it
     local tmp="$(mktemp)"
-    tail --silent --lines $HISTSIZE "${histfiles[@]:$start:$num}" | tail --lines $HISTSIZE > "$tmp"
+
+    cat "${histfiles[@]:0:$num}" | tail --lines $HISTSIZE > "$tmp"
     history -r "$tmp"
     rm "$tmp"
 };
 __load_bash_history
-
 
 
 # Add completion for tools installed via brew
