@@ -20,6 +20,7 @@ PATH=/usr/local/sbin:$PATH
 PATH=~/.local/bin:$PATH    # pipx
 PATH=~/.cargo/bin:$PATH    # Rust
 PATH=~/bin:$PATH           # personal scripts
+PATH=/usr/local/opt/ccache/libexec:$PATH # ccache
 export PATH
 
 # Use vim by default
