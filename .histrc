@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# History management
+
+hist-new(){
+
+    # Flush current history and clear it
+    history -a
+    history -c
+
+    # Start a new session (named based on time)
+    export HISTFILE="$HISTDIR/$(date -u "+%Y/%m/%d/%H-%M-%S-%N").hist"
+    mkdir --parents "$(dirname "$HISTFILE")"
+}
+
+hist-show(){
+    echo "$HISTFILE"
+    cat "$HISTFILE" 2>/dev/null | wc -l
+}
+
+hist-load(){
+    # optional param: history file to start at
+
+    # Collect up all history files (will be sorted by date)
+    local histfiles=("$HISTDIR"/*/*/*/*.hist)
+
+    local num=${#histfiles[@]}
+    [ "$num" -gt 0 ] || return
+
+    if [ -n "$1" ]; then
+        # Find the index of the specified history file
+        # (search from end to optimize for loading recent sessions)
+        for (( num=${#histfiles[@]}-1; num >= 0 ; num-- )) ; do
+            if [ "$1" -ef "${histfiles[num]}" ]; then
+                ((num+=1))
+                break
+            fi
+        done
+        if [ "$num" -lt 0 ]; then
+            echo "History file $1 not found!"
+            return 1
+        fi
+    fi
+
+    # Merge the history files and load the last $HISTSIZE lines from it
+    local tmp="$(mktemp)"
+
+    cat "${histfiles[@]:0:$num}" | tail --lines $HISTSIZE > "$tmp"
+    history -c
+    history -r "$tmp"
+    rm "$tmp"
+}
+
+if __exists rg; then
+    hist-search(){
+        rg --no-heading --no-filename --no-line-number --sort path "$@" "$HISTDIR"
+    }
+else
+    hist-search(){
+        # Search, sort by filename+line number, cut filename+line number off
+        grep --recursive --line-number --color=always "$@" "$HISTDIR" |\
+            sort --field-separator ':' --key 1,1 --key 2n,2 |\
+            cut --delimiter ':' --fields 3-
+    }
+fi
+
+
+__hist_switch_complete(){
+    # NOTE: Will choke on spaces, doesnt expand shell variables properly
+    # TODO: there has to be a better way
+    local files=("$HISTDIR"/*/*/*/*.hist)
+    COMPREPLY=( $(compgen -W "${files[*]}" -- "$2" ) )
+}
+complete -o default -F __hist_switch_complete "hist-switch"
+
+hist-switch(){
+    if [ ! -r "$1" ]; then
+        echo "Unable to find history session '$1'"
+        return 1
+    elif [ "$HISTFILE" -ef "$1" ]; then
+        echo "Already using history session '$1'"
+        return 2
+    fi
+
+    # Flush current history, switch HISTFILE, load history from that session and previous
+    history -a
+    export HISTFILE="$1"
+    hist-load "$1"
+}
+
+
+# Set top-level directory for history files
+export HISTDIR="$HOME/.bash_history.d"
+
+# Always append history after every command and on logout
+PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+shopt -s histappend
+
+# Pruning
+export HISTIGNORE="cd:ls:exit:[bf]g:%*:clear:reset:deactivate"
+export HISTCONTROL=ignoredups:ignorespace  # no subsquent duplicates, ignore commands starting with " "
+
+# Amount of history to store
+export HISTSIZE=50000        # Load a large amount of history into memory for Ctrl+r searching
+export HISTFILESIZE=99999999 # "Unlimited" number of lines in history files (https://lists.gnu.org/archive/html/bug-bash/2009-02/msg00108.html)
+
+# Single line history wherever possible
+# NOTE: newlines in literals will always be stored on multiple lines
+shopt -s cmdhist  # Store multi-line commands as a single line
+shopt -u lithist  # Prefer not using newlines to store history wherever possible
+
+# Safer history expansion
+set +H               # Disable by default
+shopt -s histverify  # Give a chance to edit history expansions before running them

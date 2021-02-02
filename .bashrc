@@ -15,106 +15,12 @@ fi
 [ -r /etc/bashrc ] && . /etc/bashrc
 
 
-# History settings
-# Every terminal gets its own history file based on start time
-export HISTDIR="$HOME/.bash_history.d"
-export HISTFILE="$HISTDIR/$(date -u "+%Y/%m/%d/%H-%M-%S-%N").hist"
-mkdir --parents "$(dirname "$HISTFILE")"
-
-# Always append history after every command and on logout
-PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
-shopt -s histappend
-
-# Pruning
-export HISTIGNORE="cd:ls:exit:[bf]g:%*:clear:reset:deactivate"
-export HISTCONTROL=ignoredups:ignorespace  # no subsquent duplicates, ignore commands starting with " "
-
-# Amount of history to store
-export HISTSIZE=50000        # Load a large amount of history into memory for Ctrl+r searching
-export HISTFILESIZE=99999999 # "Unlimited" number of lines in history files (https://lists.gnu.org/archive/html/bug-bash/2009-02/msg00108.html)
-
-# Single line history wherever possible
-# NOTE: newlines in literals will always be stored on multiple lines
-shopt -s cmdhist  # Store multi-line commands as a single line
-shopt -u lithist  # Prefer not using newlines to store history wherever possible
-
-# Safer history expansion
-set +H               # Disable by default
-shopt -s histverify  # Give a chance to edit history expansions before running them
-
-# Define a function that greps all past history
-if __exists rg; then
-    histgrep(){
-        rg --no-heading --no-filename --no-line-number --sort path "$@" "$HISTDIR"
-    }
-else
-    histgrep(){
-        # Search, sort by filename+line number, cut filename+line number off
-        grep --recursive --line-number --color=always "$@" "$HISTDIR" |\
-            sort --field-separator ':' --key 1,1 --key 2n,2 |\
-            cut --delimiter ':' --fields 3-
-    }
+# Source history script and start a new session
+if [ -r ~/.histrc ]; then
+    . ~/.histrc
+    hist-new
+    hist-load
 fi
-
-# Define a function to switch back into an existing session
-# Useful in cases where a terminal is accidentally closed
-# TODO: Easier discovery of past sessions
-histswitch(){
-    if [ ! -r "$1" ]; then
-        echo "Unable to find history session '$1'"
-        return 1
-    elif [ "$HISTFILE" -ef "$1" ]; then
-        echo "Already using history session '$1'"
-        return 2
-    fi
-
-    # Flush current history, switch HISTFILE, reload history from that session and previous
-    history -a
-    export HISTFILE="$1"
-    history -c
-    __load_bash_history "$1" && echo "Switched to history session '$1'"
-}
-__histswitch_complete(){
-    # NOTE: Will choke on spaces, doesn't expand shell variables properly
-    # TODO: there has to be a better way
-    local files=("$HISTDIR"/*/*/*/*.hist)
-    COMPREPLY=( $(compgen -W "${files[*]}" -- "$2" ) )
-}
-complete -o default -F __histswitch_complete histswitch
-
-# Load past history from across multiple files up to $HISTSIZE entries
-__load_bash_history() {
-    # optional param: history file to start at
-
-    # Collect up all history files (will be sorted by date)
-    local histfiles=("$HISTDIR"/*/*/*/*.hist)
-
-    local num=${#histfiles[@]}
-    [ "$num" -gt 0 ] || return
-
-    if [ -n "$1" ]; then
-        # Find the index of the specified history file
-        # (search from end to optimize for loading recent sessions)
-        for (( num=${#histfiles[@]}-1; num >= 0 ; num-- )) ; do
-            if [ "$1" -ef "${histfiles[num]}" ]; then
-                ((num+=1))
-                break
-            fi
-        done
-        if [ "$num" -lt 0 ]; then
-            echo "History file $1 not found!"
-            return 1
-        fi
-    fi
-
-    # Merge the history files and load the last $HISTSIZE lines from it
-    local tmp="$(mktemp)"
-
-    cat "${histfiles[@]:0:$num}" | tail --lines $HISTSIZE > "$tmp"
-    history -r "$tmp"
-    rm "$tmp"
-};
-__load_bash_history
 
 
 # Add completion for tools installed via brew
