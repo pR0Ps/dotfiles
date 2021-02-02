@@ -12,27 +12,29 @@ if [ -n "${VIRTUAL_ENV:-}" ]; then
 fi
 
 python="${1:-python3}"
-venv="tempvenv"
+venvdir="${XDG_CACHE_HOME:-$HOME/.cache}/tempvenv"
 
-tmp=$(mktemp --directory)
+mkdir -p "$venvdir"
+
+tmp=$(mktemp --tmpdir="$venvdir" --directory "venv-XXX")
 trap 'rm -rf "$tmp"' EXIT
 
 # Prefer virtualenv (faster, compatible with python2),
 # fall back to python with isolation (python3.4+),
 # fall back to non-isolated python,
 # Otherwise error out
-virtualenv --quiet --python "$python" "$tmp/$venv" &>/dev/null || \
-    "$python" -I -m venv "$tmp/$venv" &>/dev/null || \
-    "$python" -m venv "$tmp/$venv" &>/dev/null || \
+virtualenv --quiet --python "$python" "$tmp" &>/dev/null || \
+    "$python" -I -m venv "$tmp" &>/dev/null || \
+    "$python" -m venv "$tmp" &>/dev/null || \
     (echo "Failed to create venv with interpreter $python" && exit 1)
 
 # Run a non-login shell that sources the venv
-bash --rcfile <( echo "
+$SHELL --rcfile <( echo "
 source $HOME/.bashrc 2>/dev/null || source /etc/bashrc 2>/dev/null
-source \"$tmp/$venv/bin/activate\" || exit 1
+source \"$tmp/bin/activate\" || exit 1
 alias deactivate=exit
 echo '==============================='
 echo \"Now in temporary $python venv\"
-echo \"$tmp/$venv\"
+echo \"$tmp\"
 echo '==============================='
-" )
+" ) || :
