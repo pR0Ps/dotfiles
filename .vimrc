@@ -14,6 +14,14 @@ function s:preserve_context(command)
   call cursor(l, c)
 endfunction
 
+function s:clear_undo()
+  "See ':help clear-undo'
+  let l:undolevels=&undolevels
+  let &undolevels=-1
+  exe "normal a \<BS>\<Esc>"
+  let &undolevels=l:undolevels
+endfunction
+
 "Make sure a directory exists (returns the directory)
 function s:ensuredir(dir)
     if !isdirectory(a:dir)
@@ -234,6 +242,48 @@ if executable('jq')
     command FormatJSON :%! jq .
 else
     command FormatJSON :%! python -m json.tool
+endif
+
+"Support super basic hex editing
+function s:ToggleHex()
+  if !exists("b:hexedit") || !b:hexedit
+    if !exists("b:hexedit")
+      "Initial setup
+      let b:ft=&ft
+      let b:undolevels=&undolevels
+      let b:modifiable=&modifiable
+      let b:readonly=&readonly
+      let &display="uhex"
+
+      "Reload the file in binary mode
+      setlocal binary
+      silent :e
+    endif
+    let b:hexedit=1
+
+    let &readonly=0
+    let &modifiable=1
+    %!xxd
+    let &readonly=1
+    let &modifiable=b:modifiable
+
+    let &ft="xxd"
+    call s:clear_undo()
+  else
+    let b:hexedit=0
+
+    let &readonly=0
+    let &modifiable=1
+    %!xxd -r
+    let &readonly=b:readonly
+    let &modifiable=b:modifiable
+
+    let &ft=b:ft
+    call s:clear_undo()
+  endif
+endfunction
+if executable('xxd')
+  command ToggleHex :call s:ToggleHex()
 endif
 
 "Show the syntax classes of the text under the cursor
