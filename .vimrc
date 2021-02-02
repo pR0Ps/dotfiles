@@ -14,14 +14,6 @@ function s:preserve_context(command)
   call cursor(l, c)
 endfunction
 
-function s:clear_undo()
-  "See ':help clear-undo'
-  let l:undolevels=&undolevels
-  let &undolevels=-1
-  exe "normal a \<BS>\<Esc>"
-  let &undolevels=l:undolevels
-endfunction
-
 "Make sure a directory exists (returns the directory)
 function s:ensuredir(dir)
   if !isdirectory(a:dir)
@@ -268,7 +260,6 @@ function s:ToggleHex()
     let &modifiable=b:modifiable
 
     let &ft="xxd"
-    call s:clear_undo()
   else
     let b:hexedit=0
 
@@ -279,7 +270,6 @@ function s:ToggleHex()
     let &modifiable=b:modifiable
 
     let &ft=b:ft
-    call s:clear_undo()
   endif
 endfunction
 if executable('xxd')
