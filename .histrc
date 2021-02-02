@@ -53,14 +53,16 @@ hist-load(){
 
 if __exists rg; then
     hist-search(){
-        rg --no-heading --no-filename --no-line-number --sort path "$@" "$HISTDIR"
+        rg --no-heading --no-line-number --color=always --sort path "$@" "$HISTDIR" |\
+            sed "s|${HISTDIR}/||"
     }
 else
     hist-search(){
         # Search, sort by filename+line number, cut filename+line number off
         grep --recursive --line-number --color=always "$@" "$HISTDIR" |\
             sort --field-separator ':' --key 1,1 --key 2n,2 |\
-            cut --delimiter ':' --fields 3-
+            cut --delimiter ':' --fields 1,3- |\
+            sed "s|${HISTDIR}/||"
     }
 fi
 
