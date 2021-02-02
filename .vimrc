@@ -24,24 +24,24 @@ endfunction
 
 "Make sure a directory exists (returns the directory)
 function s:ensuredir(dir)
-    if !isdirectory(a:dir)
-        call mkdir(a:dir)
-    endif
-    return a:dir
+  if !isdirectory(a:dir)
+    call mkdir(a:dir)
+  endif
+  return a:dir
 endfunction
 
 "Load XDG directory variables
 if !empty($XDG_CACHE_HOME)
-    let s:cachedir = expand("$XDG_CACHE_HOME/vim")
+  let s:cachedir = expand("$XDG_CACHE_HOME/vim")
 else
-    let s:cachedir = expand("~/.vim/cache")
+  let s:cachedir = expand("~/.vim/cache")
 endif
 call s:ensuredir(s:cachedir)
 
 if !empty($XDG_CACHE_HOME)
-    let s:datadir = expand("$XDG_DATA_HOME/vim")
+  let s:datadir = expand("$XDG_DATA_HOME/vim")
 else
-    let s:datadir = expand("~/.vim/data")
+  let s:datadir = expand("~/.vim/data")
 endif
 call s:ensuredir(s:datadir)
 
@@ -72,7 +72,7 @@ set virtualedit=block,onemore "Allow cursor to be placed wherever in vblock mode
 set nrformats-=octal "Don't assume numbers starting with 0 are octal
 set switchbuf=usetab "When opening a buffer, switch to it if it is already open
 if has("patch-7.3.541")
-    set formatoptions+=j "Remove comment characters when joining commented lines
+  set formatoptions+=j "Remove comment characters when joining commented lines
 endif
 
 "Split panes below and to the right by default
@@ -99,7 +99,7 @@ set ruler "Show cursor line and position
 set fillchars+=vert:│ "Use box drawing character for vertical splits to show a continuous line
 set laststatus=2 "Always show status line
 if has("patch-8.1.1564")
-    set signcolumn=number "Replace numbers with signs instead of opening a new column for them
+  set signcolumn=number "Replace numbers with signs instead of opening a new column for them
 endif
 
 "}}
@@ -149,9 +149,9 @@ let &viminfofile=s:datadir . "/viminfo" "Persist the above info to the data dire
 set spelllang=en_ca
 let &spellfile=s:ensuredir(s:datadir."/spell") . "/en.utf8.add"
 if empty(&spellfile)
-    "The default is to create the spellfile based on the first writable
-    "directory in the rtp. Set it to ~/.vim/data instead.
-    let &spellfile=s:ensuredir(s:ensuredir(expand("~/.vim/data")) . "/spell") . "/en.utf8.add"
+  "The default is to create the spellfile based on the first writable
+  "directory in the rtp. Set it to ~/.vim/data instead.
+  let &spellfile=s:ensuredir(s:ensuredir(expand("~/.vim/data")) . "/spell") . "/en.utf8.add"
 endif
 
 
@@ -159,16 +159,16 @@ endif
 "}}
 "--Autocommands
 augroup filetypes
-    autocmd!
-    autocmd filetype python setlocal shiftwidth=4 tabstop=4 softtabstop=4
-    autocmd filetype css,less,scss setlocal shiftwidth=2 tabstop=2 softtabstop=2
-    autocmd filetype html,htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
-    autocmd filetype javascript,svelte setlocal shiftwidth=2 tabstop=2 softtabstop=2
-    autocmd filetype lua setlocal shiftwidth=2 tabstop=2 softtabstop=2
-    autocmd filetype make setlocal noexpandtab
-    autocmd filetype markdown setlocal spell textwidth=100 cc=100
-    autocmd filetype gitcommit setlocal spell textwidth=72 cc=50,72
-    autocmd filetype gitcommit,gitrebase,svn,hgcommit let s:nocursorrestore=1
+  autocmd!
+  autocmd filetype python setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd filetype css,less,scss setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd filetype html,htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd filetype javascript,svelte setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd filetype lua setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd filetype make setlocal noexpandtab
+  autocmd filetype markdown setlocal spell textwidth=100 cc=100
+  autocmd filetype gitcommit setlocal spell textwidth=72 cc=50,72
+  autocmd filetype gitcommit,gitrebase,svn,hgcommit let s:nocursorrestore=1
 augroup END
 
 "Restore last cursor position when opening a file unless `s:nocursorrestore` is set
@@ -235,13 +235,13 @@ nnoremap <C-K> :bprev<CR>
 command Sudow execute "write !sudo tee >/dev/null '%'" | edit!
 
 "Strip trailing whitespace
-command StripTWS :call s:preserve_context("%s/\\s\\+$//e")
+command RmTrail :call s:preserve_context("%s/\\s\\+$//e")
 
 "Format JSON nicely
 if executable('jq')
-    command FormatJSON :%! jq .
+  command FormatJSON :%! jq .
 else
-    command FormatJSON :%! python -m json.tool
+  command FormatJSON :%! python -m json.tool
 endif
 
 "Support super basic hex editing
@@ -323,16 +323,16 @@ command! GFilesFB execute (len(system('git rev-parse'))) ? ':Files' : ':GFiles'
 
 " Add the fzf binary to the runtime path and define mappings
 for s:fzf_dir in [ "/usr/local/opt/fzf", expand("~/.fzf") ]
-    if isdirectory(s:fzf_dir)
-        let &rtp .= "," . s:fzf_dir
-        nnoremap <C-F> :RG<CR>
-        nnoremap <C-O> :GFilesFB<CR>
-        " Upgrade default mappings to use plugin-defined ones
-        nnoremap q: :History:<CR>
-        nnoremap q/ :History/<CR>
-        nnoremap q? :History/<CR>
-        break
-    endif
+  if isdirectory(s:fzf_dir)
+    let &rtp .= "," . s:fzf_dir
+    nnoremap <C-F> :RG<CR>
+    nnoremap <C-O> :GFilesFB<CR>
+    " Upgrade default mappings to use plugin-defined ones
+    nnoremap q: :History:<CR>
+    nnoremap q/ :History/<CR>
+    nnoremap q? :History/<CR>
+    break
+  endif
 endfor
 
 "}}
