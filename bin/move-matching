@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -ne 2 ]; then
+    echo "Moves files from <source dir> to <target dir> only if the"
+    echo "filename exists in both directories"
+    echo ""
+    echo "Usage: $(basename "$0") <source dir> <target dir>"
+    exit 1
+fi
+
+find "$2" -maxdepth 1 -type f -print0 | while read -d $'\0' -r file; do
+    file="$(basename "$file")"
+    if [ -f "$1/$file" ]; then
+        mv "$1/$file" "$2/$file"
+    fi
+done
