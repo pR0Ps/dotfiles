@@ -103,6 +103,8 @@ user_pref("dom.ipc.plugins.reportCrashURL", false);
 user_pref("extensions.getAddons.showPane", false); // Hides the "Recommended" tab in about:addons
 user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 user_pref("browser.discovery.enabled", false);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
 
 // Disable studies and experiments
 // Telemetry is left enabled since I want my usage to be represented in their
