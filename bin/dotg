@@ -116,6 +116,7 @@ clone_dotfiles() {
 	# non-existent
 	mkdir -p "$BIN_DIR"
 	git checkout HEAD -- "$DOTG"
+	git submodule update --init --recursive
 }
 
 case "$1" in
