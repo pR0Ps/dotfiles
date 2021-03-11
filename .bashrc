@@ -16,9 +16,9 @@ if [ -r ~/.histrc ]; then
 fi
 
 
-# Add completion for tools installed via brew
-if [ "$OSNAME" = "macOS" ] && __exists brew; then
-    [ -r "$(brew --prefix)/etc/bash_completion" ] && source "$(brew --prefix)/etc/bash_completion"
+# Add completion for tools installed via MacPorts
+if [ "$OSNAME" = "macOS" ] && [ -r /opt/local/etc/profile.d/bash_completion.sh ]; then
+    . /opt/local/etc/profile.d/bash_completion.sh
 fi
 
 # pipx completions
@@ -27,10 +27,9 @@ if __exists register-python-argcomplete && __exists pipx; then
 fi
 
 # Set up fzf
-# NOTE: Needs to be done *after* brew autocomplete or it will be overridden
-[ -r ~/.fzf.bash ] && source ~/.fzf.bash
-
 if __exists fzf; then
+    [ -r /opt/local/share/fzf/shell/key-bindings.bash ] && . /opt/local/share/fzf/shell/key-bindings.bash
+
     # Use up to 50% of the terminal height
     export FZF_TMUX_HEIGHT="50%"
 

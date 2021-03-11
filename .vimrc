@@ -297,8 +297,8 @@ colorscheme molokai-dark
 "  - <Ctrl+X>: new split
 "  - <Ctrl+V>: new vsplit
 
-" Define an 'RG' command that calls 'rg' as you type
-" (using 'Rg' just does the initial search once and uses fzf to filter the results)
+" Define a function that calls 'rg' as you type
+" (using the fzf plugin's 'Rg' just does the initial search once and uses fzf to filter the results)
 function! s:ripgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
@@ -306,24 +306,31 @@ function! s:ripgrepFzf(query, fullscreen)
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-command! -nargs=* -bang RG call s:ripgrepFzf(<q-args>, <bang>0)
 
-" Executes :GFiles if in a git repo and :Files if not
-command! GFilesFB execute (len(system('git rev-parse'))) ? ':Files' : ':GFiles'
+if executable("fzf")
+  " Add the fzf binary to the runtime path and define mappings
+  " (paths are for: macports, brew, unmanaged)
+  for s:fzf_dir in [ "/opt/local/share/fzf/vim", "/usr/local/opt/fzf", expand("~/.fzf") ]
+    if isdirectory(s:fzf_dir)
+      let &rtp .= "," . s:fzf_dir
+      " If ripgrep is installed, add an RG command and map Ctrl+F to it
+      if executable("rg")
+        command! -nargs=* -bang RG call s:ripgrepFzf(<q-args>, <bang>0)
+        nnoremap <C-F> :RG<CR>
+      endif
 
-" Add the fzf binary to the runtime path and define mappings
-for s:fzf_dir in [ "/usr/local/opt/fzf", expand("~/.fzf") ]
-  if isdirectory(s:fzf_dir)
-    let &rtp .= "," . s:fzf_dir
-    nnoremap <C-F> :RG<CR>
-    nnoremap <C-O> :GFilesFB<CR>
-    " Upgrade default mappings to use plugin-defined ones
-    nnoremap q: :History:<CR>
-    nnoremap q/ :History/<CR>
-    nnoremap q? :History/<CR>
-    break
-  endif
-endfor
+      " Executes :GFiles if in a git repo and :Files if not
+      command! GFilesFB execute (len(system('git rev-parse'))) ? ':Files' : ':GFiles'
+      nnoremap <C-O> :GFilesFB<CR>
+
+      " Upgrade default mappings to use plugin-defined ones
+      nnoremap q: :History:<CR>
+      nnoremap q/ :History/<CR>
+      nnoremap q? :History/<CR>
+      break
+    endif
+  endfor
+endif
 
 "}}
 "----Rooter - https://github.com/airblade/vim-rooter

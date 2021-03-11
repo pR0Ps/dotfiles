@@ -23,12 +23,17 @@ __add_env_dir(){
 }
 
 # Add common locations to the path
-
 __add_env_dir PATH /usr/local/sbin
 __add_env_dir PATH ~/.local/bin    # pipx
 __add_env_dir PATH ~/.cargo/bin    # Rust
 __add_env_dir PATH ~/bin           # personal scripts
-__add_env_dir PATH /usr/local/opt/ccache/libexec # ccache
+__add_env_dir PATH /opt/local/libexec/ccache # ccache
+if [ "$OSNAME" = "macOS" ]; then
+    # Add MacPorts-installed software to the path
+    __add_env_dir PATH /opt/local/bin
+    __add_env_dir PATH /opt/local/sbin
+    __add_env_dir PATH /opt/local/libexec/gnubin # Use GNU coreutils by default
+fi
 
 # Use vim by default
 export VISUAL=vim
@@ -43,15 +48,6 @@ __exists(){
 }
 export -f __exists 2>/dev/null || : # Can error in POSIX sh - ignore it
 
-if [ "$OSNAME" = "macOS" ] && __exists brew; then
-    # Prefer brew-installed coreutils instead of the default BSD ones
-    __add_env_dir PATH $(brew --prefix)/opt/coreutils/libexec/gnubin
-    __add_env_dir MANPATH $(brew --prefix)/opt/coreutils/libexec/gnuman
-
-    # Don't fall back to source builds if downloading a bottle fails
-    # (could be a timeout or other temporary issue)
-    export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK=1
-fi
 
 # Define XDG directories in the futile hope that programs actually use them
 if [ "$OSNAME" = "macOS" ]; then
