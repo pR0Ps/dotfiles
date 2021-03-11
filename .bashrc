@@ -4,13 +4,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Disable session save/restore feature for Apple terminal
-if [ "$TERM_PROGRAM" == "Apple_Terminal" ]; then
-    # Only checked in a sourced script so no need to export
-    # shellcheck disable=2034
-    SHELL_SESSION_DID_INIT=1
-fi
-
 # Source global bashrc
 [ -r /etc/bashrc ] && . /etc/bashrc
 
