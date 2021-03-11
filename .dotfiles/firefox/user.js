@@ -9,6 +9,9 @@
 // Don't warn when modifying about:config
 user_pref("browser.aboutConfig.showWarning", false);
 
+// Enable loading styles from userChrome.css
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+
 
 // ----- Interface tweaks -----
 // Compact UI (smaller back button, etc)
