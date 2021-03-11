@@ -16,7 +16,7 @@ ln -s ~/.dotfiles/firefox/userChrome.css chrome/
 : > SiteSecurityServiceState.txt
 chmod a-w SiteSecurityServiceState.txt
 
-# Install extensions (see list below)
+# Log into Firefox Account to sync extensions and other data
 ```
 
 user.js
@@ -29,23 +29,13 @@ Hides the tabs on the top of the window (replaced with an addon that puts tabs o
 
 Extensions
 ----------
-- https://addons.mozilla.org/firefox/addon/clearurls
-- https://addons.mozilla.org/firefox/addon/cliget
-- https://addons.mozilla.org/firefox/addon/cookies-txt
-- https://addons.mozilla.org/firefox/addon/downthemall
-- https://addons.mozilla.org/firefox/addon/drag-select-link-text
-- https://addons.mozilla.org/firefox/addon/feed-preview
-- https://addons.mozilla.org/firefox/addon/multi-account-containers
-- https://addons.mozilla.org/firefox/addon/google-search-link-fix
-- https://addons.mozilla.org/firefox/addon/py3direct
-- https://addons.mozilla.org/firefox/addon/sidebery
-- https://addons.mozilla.org/firefox/addon/styl-us
-- https://addons.mozilla.org/firefox/addon/tab_search
-- https://addons.mozilla.org/firefox/addon/temporary-containers
-- https://addons.mozilla.org/firefox/addon/to-google-translate
-- https://addons.mozilla.org/firefox/addon/ublacklist
-- https://addons.mozilla.org/firefox/addon/ublock-origin
-- https://addons.mozilla.org/firefox/addon/universal-bypass
-- https://addons.mozilla.org/firefox/addon/urls-list
-- https://addons.mozilla.org/firefox/addon/violentmonkey
-- https://addons.mozilla.org/firefox/addon/youtube-rss-finder
+Not a complete list. In the event that I can't automatically sync extensions using a Firefox Account
+these are the essential extensions I would manually install.
+
+| Name | Details |
+|------|---------|
+| [cliget](https://addons.mozilla.org/firefox/addon/cliget) | Generates `curl`/`wget`/`aria2` commands for downloading files |
+| [Sidebery](https://addons.mozilla.org/firefox/addon/sidebery) | Displays tabs vertically as a tree in the sidebar |
+| [TabSearch](https://addons.mozilla.org/firefox/addon/tab_search) | Allows jumping between tabs by searching |
+| [Temporary Containers](https://addons.mozilla.org/firefox/addon/temporary-containers) | Easy disposable isolated tabs (like private windows) |
+| [uBlock Origin](https://addons.mozilla.org/firefox/addon/ublock-origin) | Blocks unwanted content |
