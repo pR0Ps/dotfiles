@@ -15,13 +15,20 @@ case "$(uname)" in
 esac
 export OSNAME
 
+# Helper function for adding dirs to environment variables
+__add_env_dir(){
+    if [ -d "$2" ]; then
+        eval "export $1=\"$2\":\$$1"
+    fi
+}
+
 # Add common locations to the path
-PATH=/usr/local/sbin:$PATH
-PATH=~/.local/bin:$PATH    # pipx
-PATH=~/.cargo/bin:$PATH    # Rust
-PATH=~/bin:$PATH           # personal scripts
-PATH=/usr/local/opt/ccache/libexec:$PATH # ccache
-export PATH
+
+__add_env_dir PATH /usr/local/sbin
+__add_env_dir PATH ~/.local/bin    # pipx
+__add_env_dir PATH ~/.cargo/bin    # Rust
+__add_env_dir PATH ~/bin           # personal scripts
+__add_env_dir PATH /usr/local/opt/ccache/libexec # ccache
 
 # Use vim by default
 export VISUAL=vim
@@ -38,8 +45,8 @@ export -f __exists 2>/dev/null || : # Can error in POSIX sh - ignore it
 
 if [ "$OSNAME" = "macOS" ] && __exists brew; then
     # Prefer brew-installed coreutils instead of the default BSD ones
-    export PATH=$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH
-    export MANPATH=$(brew --prefix)/opt/coreutils/libexec/gnuman:$MANPATH
+    __add_env_dir PATH $(brew --prefix)/opt/coreutils/libexec/gnubin
+    __add_env_dir MANPATH $(brew --prefix)/opt/coreutils/libexec/gnuman
 
     # Don't fall back to source builds if downloading a bottle fails
     # (could be a timeout or other temporary issue)
