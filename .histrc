@@ -11,6 +11,7 @@ hist-new(){
     # Start a new session (named based on time)
     export HISTFILE="$HISTDIR/$(date -u "+%Y/%m/%d/%H-%M-%S-%N").hist"
     mkdir --parents "$(dirname "$HISTFILE")"
+    touch "$HISTFILE"
 }
 
 hist-show(){
