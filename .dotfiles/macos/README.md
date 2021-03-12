@@ -4,6 +4,23 @@ macOS setup
 Run `./apply_os_settings.sh` then log out and back in. This will clear all the default apps out of
 the dock and set some system preferences.
 
+Set up SMB auto-mounts in /mnt
+------------------------------
+Set up the auto-mount config file
+```bash
+echo $'\n# Custom SMB mounts\n/mnt auto_smb' | sudo tee -a /etc/auto_master >/dev/null
+sudo touch /etc/auto_smb
+sudo chmod a-rwx,u+rw /etc/auto_smb
+```
+
+Add mounts to `/etc/auto_smb` in the following format:
+Note that everything in `<>`'s needs to be URL-escaped (ie. `@` --> `%40`)
+```
+<name> -fstype=smbfs ://<user>@<server>/<share>
+```
+
+Run `sudo automount -vc` to apply changes
+
 
 Misc other tweaks
 -----------------
