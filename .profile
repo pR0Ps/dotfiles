@@ -33,6 +33,9 @@ if [ "$OSNAME" = "macOS" ]; then
     __add_env_dir PATH /opt/local/bin
     __add_env_dir PATH /opt/local/sbin
     __add_env_dir PATH /opt/local/libexec/gnubin # Use GNU coreutils by default
+
+    # Override system vim with MacVim's version if it's installed
+    __add_env_dir PATH /Applications/MacVim.app/Contents/bin
 fi
 
 # Use vim by default
