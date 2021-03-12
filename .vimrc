@@ -134,7 +134,9 @@ let g:netrw_home=s:datadir "Persist bookmarks and history for netrw to the data 
 "Viminfo
 set history=1000 "Remember 1000 lines of cmd and search history
 set viminfo='100,<0,h "remember marks for 100 files, don't save registers, disable hlsearch on load
-let &viminfofile=s:datadir . "/viminfo" "Persist the above info to the data directory
+if !has('nvim')
+  let &viminfofile=s:datadir . "/viminfo" "Persist the above info to the data directory
+endif
 
 "Spelling
 "WARNING: spellfile won't be set if the path has a space in it (bug in vim?)
