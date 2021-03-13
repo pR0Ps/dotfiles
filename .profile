@@ -51,20 +51,19 @@ __exists(){
 }
 export -f __exists 2>/dev/null || : # Can error in POSIX sh - ignore it
 
-
 # Define XDG directories in the futile hope that programs actually use them
 if [ "$OSNAME" = "macOS" ]; then
-    export XDG_CONFIG_HOME="$HOME/Library/Application Support/"
     export XDG_DATA_HOME="$HOME/Library/Application Support/"
     export XDG_CACHE_HOME="$HOME/Library/Caches/"
     export XDG_STATE_HOME="$HOME/Library/Application Support/"
     export XDG_CONFIG_DIRS="/Library/Application Support/"
     export XDG_DATA_DIRS="/Library/Application Support/"
 elif [ "$OSNAME" = "Linux" ]; then
-    export XDG_CONFIG_HOME="$HOME/.config/"
     export XDG_DATA_HOME="$HOME/.local/share/"
     export XDG_CACHE_HOME="$HOME/.cache/"
     export XDG_STATE_HOME="$HOME/.local/state/"
     export XDG_CONFIG_DIRS="/etc/xdg/"
     export XDG_DATA_DIRS="/usr/local/share/:/usr/share/"
 fi
+# Use the same local config directory on every OS
+export XDG_CONFIG_HOME="$HOME/.config/"
