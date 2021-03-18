@@ -18,6 +18,8 @@
 [fetch]
     prune = true
     pruneTags = true
+[init]
+    defaultBranch = master
 [log]
     follow = true  # Assume --follow when given a single path
 [merge]
