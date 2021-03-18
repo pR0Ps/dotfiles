@@ -9,6 +9,10 @@ local hyper = {"alt"}
 -- Work around paste blocking by "typing" the contents of the clipboard
 hs.hotkey.bind(hyper, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
+-- Sleep display
+-- Locks if Preferences -> Security and Privacy -> General -> "Require pasword ..." is set to "immediately"
+hs.hotkey.bind(hyper, 'l', function() hs.execute('pmset displaysleepnow')  end)
+
 -- Show a menubar icon for keeping the computer awake
 hs.loadSpoon("Caffeinate")
 
