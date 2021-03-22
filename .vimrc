@@ -23,19 +23,30 @@ function s:ensuredir(dir)
 endfunction
 
 "Load XDG directory variables
+if !empty($XDG_CONFIG_HOME)
+  let s:configdir = expand("$XDG_CONFIG_HOME/vim")
+else
+  let s:configdir = expand("~/.config/vim")
+endif
+if !isdirectory(s:configdir) && isdirectory(expand("~/.vim"))
+  let s:configdir = expand("~/.vim")
+endif
+call s:ensuredir(s:configdir)
+
+if !empty($XDG_DATA_HOME)
+  let s:datadir = expand("$XDG_DATA_HOME/vim")
+else
+  let s:datadir = expand("~/.local/share/vim")
+endif
+call s:ensuredir(s:datadir)
+
 if !empty($XDG_CACHE_HOME)
   let s:cachedir = expand("$XDG_CACHE_HOME/vim")
 else
-  let s:cachedir = expand("~/.vim/cache")
+  let s:cachedir = expand("~/.cache/vim")
 endif
 call s:ensuredir(s:cachedir)
 
-if !empty($XDG_CACHE_HOME)
-  let s:datadir = expand("$XDG_DATA_HOME/vim")
-else
-  let s:datadir = expand("~/.vim/data")
-endif
-call s:ensuredir(s:datadir)
 
 
 "}}
@@ -51,6 +62,17 @@ set fileformats=unix,dos "Set fileformat based on newline detection
 
 "}}
 "--Misc
+
+" Load config from the system's normal config directory
+let &runtimepath = s:configdir . "," . &runtimepath
+if has('patch-7.4.1384')
+  let &packpath = &runtimepath
+else
+  " No native plugin support = no plugins
+  " Fall back to a reasonable built-in color scheme
+  colorscheme torte
+endif
+
 set guifont=Inconsolata-g\ for\ Powerline:h12,Inconsolata\ Medium\ 11 "Preferred font for gvim
 set shortmess+=I "Disable startup message
 set noerrorbells visualbell t_vb= "Disable beeping/flashing
@@ -144,8 +166,8 @@ let &spellfile=s:ensuredir(s:datadir."/spell") . "/en.utf8.add"
 if !has("patch-8.2.1926") && empty(&spellfile)
   "BUG: spellfile won't be set if the path has a space in it
   "The default is to create the spellfile based on the first writable
-  "directory in the rtp. Set it to ~/.vim/data instead.
-  let &spellfile=s:ensuredir(expand("~/.vim/data/spell")) . "/en.utf8.add"
+  "directory in the runtimepath. Put in a known-spaceless cache dir instead
+  let &spellfile=s:ensuredir(expand("~/.cache/vim/spell")) . "/en.utf8.add"
 endif
 
 
@@ -286,7 +308,8 @@ command SGroup echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")
 "--Plugins
 "----Molokai-dark theme - https://github.com/pR0Ps/molokai-dark
 "A high-contrast dark theme descended from the Monokai theme for TextMate
-colorscheme molokai-dark
+"Ignore the warning if it can't be found
+silent! colorscheme molokai-dark
 
 "}}
 "----fzf.vim - https://github.com/junegunn/fzf.vim
@@ -314,7 +337,7 @@ if executable("fzf")
   " (paths are for: macports, brew, unmanaged)
   for s:fzf_dir in [ "/opt/local/share/fzf/vim", "/usr/local/opt/fzf", expand("~/.fzf") ]
     if isdirectory(s:fzf_dir)
-      let &rtp .= "," . s:fzf_dir
+      let &runtimepath .= "," . s:fzf_dir
       " If ripgrep is installed, add an RG command and map Ctrl+F to it
       if executable("rg")
         command! -nargs=* -bang RG call s:ripgrepFzf(<q-args>, <bang>0)
