@@ -5,6 +5,7 @@
 # Close any open System Preferences panes to prevent them from overriding the settings
 osascript -e 'tell application "System Preferences" to quit'
 
+
 ## Power
 
 # Disable the sound effects on boot
@@ -13,14 +14,15 @@ sudo nvram SystemAudioVolume=" "
 # Wake when lid is opened
 sudo pmset -a lidwake 1
 
-# Sleep the display after 10m on battery
+# Sleep the display after 10m and disable the screen saver
 sudo pmset -b displaysleep 10
-sudo pmset -c displaysleep 0
+sudo pmset -c displaysleep 10
+defaults -currentHost write com.apple.screensaver idleTime 0
 
 # dim the screen before sleeping it
 sudo pmset -a halfdim 1
 
-# Sleep after 10m on battery
+# Sleep after 10m on battery (don't auto-sleep while charging)
 sudo pmset -b sleep 10
 sudo pmset -c sleep 0
 
@@ -37,19 +39,30 @@ sudo pmset -b disksleep 10
 # Don't wake when power source is changed
 sudo pmset -a acwake 0
 
+
+## General
+
+# Disable Gatekeeper (allow unsigned applications to run without manual approval)
+sudo spctl --master-disable
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Disable resume system-wide
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+
+
 ## Interface
 
 # Dark mode
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
-
-# Maximize on double clicking window
-defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"
 
 # Disable opening and closing window animations
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
 # Increase window resize speed for Cocoa applications
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+
+# Zoom on double clicking a window's title bar
+defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"  # sic
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -62,15 +75,11 @@ defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 # Save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
-# Automatically quit printer app once the print jobs complete
-defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+# Don’t automatically rearrange Spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
 
-# Disable the “Are you sure you want to open this application?” dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-# Disable Resume system-wide
-defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
-
+# Don't group windows by application in Mission Control/Expose
+defaults write com.apple.dock expose-group-apps -bool false
 
 ## Keyboard
 
@@ -95,8 +104,11 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 25
 
 ## Trackpad
 
+# Disable “natural” (aka backwards) scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
 # Tracking speed
-defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
 
 # Force click (enable, firm click, make click sound)
 defaults write com.apple.AppleMultitouchTrackpad ActuateDedents -int 1
@@ -111,22 +123,23 @@ defaults write NSGlobalDomain com.apple.trackpad.forceClick -bool false
 # Disable tap to click
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool false
 
+# Disable spring-loading directories (use force click to enter them)
+defaults write NSGlobalDomain com.apple.springing.enabled -bool false
+
 # Right click with 2 fingers
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -bool false
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -bool false
 
-# Disable “natural” (aka backwards) scrolling
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
-
 # Enable pinch to zoom
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.pinchGesture -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadPinch -bool true
 
 # Disable smart zoom
-defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerDoubleTapGesture -bool false
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.twoFingerDoubleTapGesture -bool false
 
 # Disable rotation
-defaults write com.apple.AppleMultitouchTrackpad TrackpadRotate -bool false
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.rotateGesture -bool false
 
 # Disable swiping between pages
 defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool false
@@ -148,13 +161,13 @@ defaults write com.apple.dock showDesktopGestureEnabled -bool false
 
 # Finder
 
-# Configure the icons to display on the desktop
+# Show drives on the desktop
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-# Show hidden files by default
+# Show hidden files
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Show filename extensions and disable warnings for changing them
@@ -194,13 +207,9 @@ defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0
 defaults write com.apple.dock autohide -bool true
 
+# Disable icon hover zooming
+defaults write com.apple.dock magnification -bool false
+
+
 ## Spaces and dashboard
-# Disable Dashboard
-defaults write com.apple.dashboard mcx-disabled -bool true
-defaults write com.apple.dock dashboard-in-overlay -bool true
 
-# Don’t automatically rearrange Spaces based on most recent use
-defaults write com.apple.dock mru-spaces -bool false
-
-# Don't save and restore bash sessions
-defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool false

@@ -6,9 +6,13 @@ the dock and set some system preferences.
 
 Set up SMB auto-mounts in /mnt
 ------------------------------
-Set up the auto-mount config file
+Set up the auto-mount config file:
 ```bash
-echo $'\n# Custom SMB mounts\n/mnt auto_smb' | sudo tee -a /etc/auto_master >/dev/null
+echo '
+# Custom SMB mounts
+/mnt auto_smb
+
+# run `sudo automount -vc` to apply changes' | sudo tee -a /etc/auto_master >/dev/null
 sudo touch /etc/auto_smb
 sudo chmod a-rwx,u+rw /etc/auto_smb
 ```
@@ -32,11 +36,6 @@ if ! grep -q "127\.0\.0\.1.*ocsp.apple.com" /etc/hosts; then
     sudo dscacheutil -flushcache
     sudo killall -HUP mDNSResponder
 fi
-```
-
-Disable Gatekeeper. Allows unsigned applications to be run without having to manually approve them.
-```bash
-sudo spctl --master-disable
 ```
 
 Turn off System Integrity Protection (SIP):
