@@ -17,7 +17,7 @@ endfunction
 "Make sure a directory exists (returns the directory)
 function s:ensuredir(dir)
   if !isdirectory(a:dir)
-    call mkdir(a:dir)
+    call mkdir(a:dir, "p")
   endif
   return a:dir
 endfunction
@@ -82,7 +82,7 @@ set linebreak "If wrapping, only break between words
 "Tab completion
 set wildmenu
 set wildmode=list:longest "bash-like shell completion style
-set wildignore+=*.sw[g-p],*.~,._*,_pycache__,*.egg-info "Ignore swap files and other garbage
+set wildignore+=*.sw[g-p],*.~,._*,__pycache__/*,*.egg-info/* "Ignore swap files and other garbage
 
 "Window UI
 set cursorline "Highight the current line
@@ -139,13 +139,13 @@ if !has('nvim')
 endif
 
 "Spelling
-"WARNING: spellfile won't be set if the path has a space in it (bug in vim?)
 set spelllang=en_ca
 let &spellfile=s:ensuredir(s:datadir."/spell") . "/en.utf8.add"
-if empty(&spellfile)
+if !has("patch-8.2.1926") && empty(&spellfile)
+  "BUG: spellfile won't be set if the path has a space in it
   "The default is to create the spellfile based on the first writable
   "directory in the rtp. Set it to ~/.vim/data instead.
-  let &spellfile=s:ensuredir(s:ensuredir(expand("~/.vim/data")) . "/spell") . "/en.utf8.add"
+  let &spellfile=s:ensuredir(expand("~/.vim/data/spell")) . "/en.utf8.add"
 endif
 
 
