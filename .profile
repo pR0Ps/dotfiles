@@ -15,6 +15,11 @@ case "$(uname)" in
 esac
 export OSNAME
 
+# Change default Go path from
+export GOPATH="$HOME/.go"
+export GOBIN="$GOPATH/bin"
+[ -d "$GOBIN" ] || mkdir -p "$GOBIN"
+
 # Helper function for adding dirs to environment variables
 __add_env_dir(){
     if [ -d "$2" ]; then
@@ -26,6 +31,7 @@ __add_env_dir(){
 __add_env_dir PATH /usr/local/sbin
 __add_env_dir PATH ~/.local/bin    # pipx
 __add_env_dir PATH ~/.cargo/bin    # Rust
+__add_env_dir PATH "$GOBIN"        # Go
 __add_env_dir PATH ~/bin           # personal scripts
 __add_env_dir PATH /opt/local/libexec/ccache # ccache
 if [ "$OSNAME" = "macOS" ]; then
