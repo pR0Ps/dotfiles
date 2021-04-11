@@ -15,7 +15,7 @@ case "$(uname)" in
 esac
 export OSNAME
 
-# Change default Go path from
+# Change default Go path
 export GOPATH="$HOME/.go"
 export GOBIN="$GOPATH/bin"
 [ -d "$GOBIN" ] || mkdir -p "$GOBIN"
@@ -23,7 +23,7 @@ export GOBIN="$GOPATH/bin"
 # Helper function for adding dirs to environment variables
 __add_env_dir(){
     if [ -d "$2" ]; then
-        eval "export $1=\"$2\":\$$1"
+        eval "export $1=\"$2\"\${$1:+:\$$1}"
     fi
 }
 
@@ -33,15 +33,21 @@ __add_env_dir PATH ~/.local/bin    # pipx
 __add_env_dir PATH ~/.cargo/bin    # Rust
 __add_env_dir PATH "$GOBIN"        # Go
 __add_env_dir PATH ~/bin           # personal scripts
-__add_env_dir PATH /opt/local/libexec/ccache # ccache
+
 if [ "$OSNAME" = "macOS" ]; then
     # Add MacPorts-installed software to the path
     __add_env_dir PATH /opt/local/bin
     __add_env_dir PATH /opt/local/sbin
     __add_env_dir PATH /opt/local/libexec/gnubin # Use GNU coreutils by default
+    __add_env_dir PATH /opt/local/libexec/ccache # ccache
 
     # Override system vim with MacVim's version if it's installed
     __add_env_dir PATH /Applications/MacVim.app/Contents/bin
+
+    # Add MacPorts library paths
+    __add_env_dir C_INCLUDE_PATH /opt/local/include
+    __add_env_dir CPLUS_INCLUDE_PATH /opt/local/include
+    __add_env_dir LIBRARY_PATH /opt/local/lib
 fi
 
 # Use vim by default
