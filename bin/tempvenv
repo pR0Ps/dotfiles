@@ -11,7 +11,7 @@ if [ -n "${VIRTUAL_ENV:-}" ]; then
     exit 1
 fi
 
-python="${1:-python3}"
+python=$(command -v "${1:-python3}")
 venvdir="${XDG_CACHE_HOME:-$HOME/.cache}/tempvenv"
 
 mkdir -p "$venvdir"
@@ -34,7 +34,9 @@ source $HOME/.bashrc 2>/dev/null || source /etc/bashrc 2>/dev/null
 source \"$tmp/bin/activate\" || exit 1
 alias deactivate=exit
 echo '==============================='
-echo \"Now in temporary $python venv\"
-echo \"$tmp\"
+echo \"Now in temporary venv:\"
+echo \" - version:    \$(python --version)\"
+echo \" - executable: $python\"
+echo \" - venv dir:   $tmp\"
 echo '==============================='
 " ) || :
