@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Wait for a host to be up (via pinging) before executing a command
+
+set -eu
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $(basename "$0") <host> <command>"
+    exit 1
+fi
+
+printf "Waiting for %s..." "$1"
+
+retry ping -c 1 -W 1 "$1" >/dev/null
+
+printf "Done!\n"
+
+shift
+"$@"

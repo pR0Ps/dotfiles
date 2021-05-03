@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Keep running a command until it succeeds
+
+while true; do
+    "$@" && break
+    sleep 1
+done
