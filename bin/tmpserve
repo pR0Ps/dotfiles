@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Serves a local HTTP port via a remote web server and shows the logs it generates
+
+# Example of a minimal Nginx config to support this:
+#server {
+#  server_name <hostname>;
+#  listen 80;
+#
+#  access_log /tmp/nginx.log;
+#  error_log /tmp/nginx.log warn;
+#
+#  location / {
+#    proxy_pass http://localhost:5000;
+#  }
+#}
+
+# Requires a host named "tmpserve" to be set up in ~/.ssh/config
+if [ $# -lt 1 ]; then
+    echo "ERROR: pass the port to remotely serve"
+    return 1
+fi
+hostname=$(ssh -G tmpserve | grep --max-count=1 --only-matching --perl-regexp '(?<=hostname ).*')
+if [ "$hostname" == "tmpserve" ]; then
+    echo "ERROR: No host named 'tmpserve' found in ~/.ssh/config"
+    return 1
+fi
+echo "============================================"
+echo "Tunneling https://$hostname to local port $1"
+echo "CTRL+C to stop"
+echo "============================================"
+ssh -R 5000:127.0.0.1:"$1" tmpserve "tail --lines=0 --follow /tmp/nginx.log"

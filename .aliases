@@ -78,3 +78,12 @@ if __exists fzf; then
             xargs kill "$@" --
     }
 fi
+
+# Use https://localhost.run to publicly serve a local HTTP port
+localhost.run() {
+    if [ $# -lt 1 ]; then
+        echo "ERROR: pass the port to remotely serve"
+        return 1
+    fi
+    ssh -R 80:localhost:"$1" nokey@localhost.run
+}
