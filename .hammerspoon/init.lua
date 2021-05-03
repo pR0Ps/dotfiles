@@ -29,3 +29,17 @@ hs.loadSpoon("MiroWindowsManager"):bindHotkeys({
   fullscreen = {hyper, "return"}
 })
 
+-- Pause/unpause the current application
+hs.hotkey.bind(hyper, "p", function()
+  local app = hs.application.frontmostApplication()
+  local pid = app:pid()
+  local stopped = hs.execute(string.format("ps -p %s -ostat=", pid), false):sub(1,1) == "T"
+
+  --Note that negating the PID sends the signal to the entire process group
+  os.execute(string.format("kill -%s -%s", stopped and "CONT" or "STOP", pid))
+  hs.alert.showWithImage(
+    string.format(stopped and "Resumed" or "Paused"),
+    hs.image.imageFromAppBundle(app:bundleID()):setSize({h=50,w=50})
+  )
+end)
+
