@@ -54,6 +54,10 @@ vga() {
     vim "$1" && git add "$1"
 }
 
+mkcd() {
+    mkdir -p -- "$1" && cd -- "$1"
+}
+
 # cd to the frontmost Finder window (easy "open prompt here")
 if [ "$OSNAME" = "macOS" ]; then
     cdf () {
