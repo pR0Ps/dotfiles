@@ -8,6 +8,7 @@ files=()
 subdir=0
 curdir=0
 delete=0
+
 if [ $# -lt 1 ]; then
     showhelp=1
 else
@@ -68,6 +69,9 @@ if ((showhelp)); then
     exit 0
 fi
 
+# To make checking for file extensions easier (has to be in [[]]'s)
+shopt -s nocasematch
+
 # Note: 7z's -ba switch is undocumented - it supresses the headers and copyright spam
 for x in "${files[@]}"; do
     if ! [ -f "$x" ]; then
@@ -80,27 +84,37 @@ for x in "${files[@]}"; do
     fi
 
     # Get number of top level files/folders (get all paths up to first slash, count uniques)
-    toplevels="$(7z l -ba -slt "$x" 2>/dev/null | sed -n -e 's/^Path = \([^\/]*\).*$/\1/p' | sort -u | wc -l)"
+    filenames="$(7z l -ba -x!pax_global_header -slt "$x" 2>/dev/null | sed -n -e 's/^Path = \([^\/]*\).*$/\1/p' | sort -u)"
+    toplevels="$(echo "$filenames" | wc -l)"
     if [ "$toplevels" -eq 0 ]; then
         echo "WARNING: Skipping '$x' - failed to parse archive file list (non-archive? corrupt?)"
         continue
     fi
 
-    # Asked for subdir or ( >1 toplevel file/folder and didn't ask for current dir)
-    if ((subdir)) || [ "$toplevels" -gt 1 ] && ! ((curdir)); then
+    # Check if this is a nested archive (tar.gz)
+    if [ "$toplevels" -eq 1 ] && [[ "${x##*.}" == "gz" ]] && [[ "${filenames##*.}" == "tar" ]]; then
+        nested=1
+    else
+        nested=0
+    fi
+
+    # Check if it should extract to the local dir or a subdir
+    if ((nested)) || ((curdir)) || { [ "$toplevels" -eq 1 ] && ! ((subdir)); }; then
+        # Extract to the same directory as the archive
+        outdir=$(dirname "$x")
+    else
+        # Extract to a directory with the same name as the archive
         outdir="${x%.*}"
         # Don't allow overwriting output dir
         if ! mkdir "$outdir" 2>/dev/null; then
             echo "WARNING: Skipping '$x' - output dir '$outdir' already exists"
             continue
         fi
-    else
-        outdir=$(dirname "$x")
     fi
 
     echo "Extracting '$x' to '$outdir':"
     echo -n "-------------------------------------"
-    if 7z x -ba -o"$outdir" "$x"; then
+    if 7z x -ba -x!pax_global_header -o"$outdir" "$x"; then
         # Extracted properly - clean up
         ((delete)) && rm "$x"
     else
@@ -109,4 +123,15 @@ for x in "${files[@]}"; do
     fi
     echo "-------------------------------------"
     echo ""
+
+    # Call this script on the nested archive to extract it using the provided flags
+    if ((nested)); then
+        if ((subdir)); then
+            $0 --delete --subdir "$outdir/$filenames"
+        elif ((curdir)); then
+            $0 --delete --curdir "$outdir/$filenames"
+        else
+            $0 --delete "$outdir/$filenames"
+        fi
+    fi
 done
