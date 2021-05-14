@@ -106,6 +106,10 @@ user_pref("browser.discovery.enabled", false);
 user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
 user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
 
+// Disable sponsored searches in the URL bar
+user_pref("browser.newtabpage.activity-stream.showSponsored", false);
+user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
+
 // Disable studies and experiments
 // Telemetry is left enabled since I want my usage to be represented in their
 // collected data. However, I'm not comfortable with my browser running random
@@ -164,7 +168,7 @@ user_pref("dom.targetBlankNoOpener.enabled", true);
 user_pref("dom.security.https_only_mode", true);
 
 // Disable HSTS
-// Disabling this provides a *choice* on how to proceed if a site isn't workng over HTTPS
+// Disabling this provides a *choice* on how to proceed if a site isn't working over HTTPS
 // There is no way to tell Firefox to not collect HSTS-enabled sites as it discovers them.
 // A workaround is to truncate `<profile>/SiteSecurityServiceState.txt` and make it read-only.
 user_pref("network.stricttransportsecurity.preloadlist", false);
