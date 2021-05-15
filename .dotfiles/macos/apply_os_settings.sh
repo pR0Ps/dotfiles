@@ -46,6 +46,31 @@ sudo pmset -a acwake 0
 sudo spctl --master-disable
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
+# Disable the certificate revocation check when launching an application
+if ! grep -q "127\.0\.0\.1 ocsp.apple.com" /etc/hosts; then
+    echo -e '# Block certificate revocation checking\n127.0.0.1 ocsp.apple.com' | sudo tee -a /etc/hosts >/dev/null
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
+fi
+
+# Set up Samba auto-mount system
+if [ ! -f /etc/auto_smb ]; then
+  echo "
+# Custom SMB mounts
+/mnt auto_smb
+
+# run 'sudo automount -vc' to apply changes" | sudo tee -a /etc/auto_master >/dev/null
+  echo \
+"# Add Samba mounts using the following format
+# Make sure to urlencode the values (ie. '@' --> '%40')
+#
+# <name> -fstype=smbfs ://<user>@<server>/<share>
+" | sudo tee /etc/auto_smb >/dev/null
+
+  # Only allow root to view/edit the files (contains passwords)
+  sudo chmod a-rwx,u+rw /etc/auto_smb
+fi
+
 # Disable resume system-wide
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
@@ -209,7 +234,3 @@ defaults write com.apple.dock autohide -bool true
 
 # Disable icon hover zooming
 defaults write com.apple.dock magnification -bool false
-
-
-## Spaces and dashboard
-

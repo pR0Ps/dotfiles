@@ -1,44 +1,54 @@
 macOS setup
 ===========
 
-Run `./apply_os_settings.sh` then log out and back in. This will clear all the default apps out of
-the dock and set some system preferences.
-
-Set up SMB auto-mounts in /mnt
-------------------------------
-Set up the auto-mount config file:
-```bash
-echo '
-# Custom SMB mounts
-/mnt auto_smb
-
-# run `sudo automount -vc` to apply changes' | sudo tee -a /etc/auto_master >/dev/null
-sudo touch /etc/auto_smb
-sudo chmod a-rwx,u+rw /etc/auto_smb
-```
-
-Add mounts to `/etc/auto_smb` in the following format:
-Note that everything in `<>`'s needs to be URL-escaped (ie. `@` --> `%40`)
-```
-<name> -fstype=smbfs ://<user>@<server>/<share>
-```
-
-Run `sudo automount -vc` to apply changes
+1. Run `./apply_os_settings.sh` then log out and back in. This will clear all the default apps out of
+   the dock and set some system preferences.
+2. Run `./install_software.sh` to install some CLI tools
+3. Manually install GUI applications (listed below)
+4. Install Powerline-compatible fonts
+   - `Inconsolata-g for Powerline.otf` for vim (from https://github.com/powerline/fonts/tree/master/Inconsolata-g)
+   - `Monaco Nerd Font Complete.dfont` for the iTerm2 non-ASCII font (patched using https://github.com/ryanoasis/nerd-fonts#font-patcher)
+5. Set up Samba shares (`sudo vim /etc/auto_smb`)
+6. Turn off System Integrity Protection (SIP) (see below)
+7. Set up read/write NTFS (see guide here: https://github.com/osxfuse/osxfuse/wiki/NTFS-3G)
 
 
-Misc other tweaks
------------------
-Don't block while checking the certificate revocation list before launching an application:
-(will fully disable revocation checking - it's probably fine...)
-```bash
-if ! grep -q "127\.0\.0\.1.*ocsp.apple.com" /etc/hosts; then
-    echo "127.0.0.1 ocsp.apple.com" | sudo tee -a /etc/hosts >/dev/null
-    sudo dscacheutil -flushcache
-    sudo killall -HUP mDNSResponder
-fi
-```
+Applications
+------------
+| Name | Details |
+|------|---------|
+| [360Controller](https://github.com/360Controller/360Controller)| Xbox controller driver |
+| [Alfred](https://www.alfredapp.com/) | Spotlight replacement |
+| [Android Studio](https://developer.android.com/studio) | Android development IDE |
+| [Cyberduck](https://cyberduck.io/) | File transfer client |
+| [Day-O](https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock) | Adds a clock + calendar to the menu bar |
+| [Discord](https://discord.com/) | Chat |
+| [Docker](https://www.docker.com/) | Run containers |
+| [Enjoy2](https://github.com/fyhuang/enjoy2) | Controller -> keyboard mapper |
+| [FinderPath](https://bahoom.com/finderpath/) | Put the current path in the Finder bar |
+| [Firefox Developer Edition](https://www.mozilla.org/firefox/new/) | Browser |
+| [GIMP](https://www.gimp.org/) | Image editor |
+| [Google Chrome](https://www.google.com/chrome/) | Browser |
+| [Hammerspoon](https://www.hammerspoon.org/) | Automation framework |
+| [HyperSwitch](https://bahoom.com/hyperswitch) | Sane cmd+tab switcher |
+| [Hex Fiend](https://hexfiend.com/ ) | Hex editor |
+| [IINA](https://iina.io/) | Media player |
+| [iTerm2](https://iterm2.com/) | Terminal emulator |
+| [MacVim](https://github.com/macvim-dev/macvim) | Text editor |
+| [Microsoft Remote Desktop](https://apps.apple.com/app/microsoft-remote-desktop/id1295203466) | RDP client |
+| [Sloth](https://sveinbjorn.org/sloth) | List open files and sockets of programs | |
+| [Smooze](https://smooze.co/ ) | Sane mouse support (extra buttons, better scrolling, etc)|
+| [Stats](https://github.com/exelban/stats) | Display system stats in the menu bar  |
+| [Tor Browser](https://www.torproject.org/) | Onion browser |
+| [Transmission](https://transmissionbt.com/) | Torrent client |
+| [VirtualBox](https://www.virtualbox.org/) | Run VMs |
+| [VLC](https://www.videolan.org/) | Media player |
+| [WebTorrent](https://webtorrent.io/) | Torrent client (supports WebRTC) |
+| [Wireguard](https://apps.apple.com/app/wireguard/id1441195209) | Secure tunnels |
 
-Turn off System Integrity Protection (SIP):
+
+Turning off System Integrity Protection (SIP)
+---------------------------------------------
 1. Boot into recovery mode by holding CMD+R while booting
 2. Launch Utilities -> Terminal
 3. Run `csrutil disable`
