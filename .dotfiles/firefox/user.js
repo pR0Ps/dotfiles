@@ -155,7 +155,7 @@ user_pref("security.family_safety.mode", 0);
 
 // Disable DNS over HTTPS (use the system-configured resolver instead)
 // 0=default, 1=reserved, 2=DoH first, 3=DoH only, 4=reserved, 5=off
-user_pref("network.trr.mode", 5)
+user_pref("network.trr.mode", 5);
 
 // Send DNS requests through SOCKS when SOCKS proxying is in use
 user_pref("network.proxy.socks_remote_dns", true);
