@@ -63,7 +63,8 @@ function obj:makeMenu()
       })
 
       -- Add an eject subentry if the volume can be ejected
-      if not data.NSURLVolumeIsInternalKey then
+      -- See https://github.com/Hammerspoon/hammerspoon/issues/2885
+      if data.NSURLVolumeIsRemovableKey or data.NSURLVolumeIsEjectableKey then
         table.insert(entries, {
           title="⏏ Eject",
           indent=1,
