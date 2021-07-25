@@ -18,12 +18,12 @@
 # Requires a host named "tmpserve" to be set up in ~/.ssh/config
 if [ $# -lt 1 ]; then
     echo "ERROR: pass the port to remotely serve"
-    return 1
+    exit 1
 fi
 hostname=$(ssh -G tmpserve | grep --max-count=1 --only-matching --perl-regexp '(?<=hostname ).*')
 if [ "$hostname" == "tmpserve" ]; then
     echo "ERROR: No host named 'tmpserve' found in ~/.ssh/config"
-    return 1
+    exit 1
 fi
 echo "============================================"
 echo "Tunneling https://$hostname to local port $1"
