@@ -1,0 +1,27 @@
+#!/bin/bash
+
+localport=9999
+destport=8384
+
+if [ $# -lt 1 ]; then
+    echo "ERROR: provide an ssh destination for the server running Syncthing"
+    exit 1
+fi
+
+dest="$1"
+tmp="$(mktemp --dry-run)-$$"
+
+# tear down the tunnel when the script exits
+trap 'ssh -q -S "$tmp" -O exit "$dest"' EXIT
+
+# set up tunnel
+if ! ssh -o ExitOnForwardFailure=yes -M -S "$tmp" -f -N -L $localport:localhost:$destport "$dest"; then
+    echo "Failed to open SSH tunnel, exiting"
+    exit 1
+fi
+
+# open browser to show interface
+open "http://127.0.0.1:$localport"
+
+echo "Port $localport forwarded to $dest:$destport - use ctrl-C to stop"
+sleep 365d
