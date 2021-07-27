@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Splits a file into 4GB pieces so it can be written to a FAT32 filesystem
+# The original file is not preserved (although it can be easily recovered by catting the split files together)
+# Will split file like so: file.ext --> file.ext/0, file.ext/1, etc
+
+set -e
+
+MAX_SIZE=4294967295  # 2^32-1
+
+if [ $# -lt 1 ]; then
+    echo "ERROR: provide a file to split"
+    exit 1
+fi
+
+size=$(stat -c "%s" "$1")
+blocks=$(( (size + (MAX_SIZE-1))/MAX_SIZE )) # divide, rounding up
+if [ $blocks -lt 2 ]; then
+    echo "File is not large enough to require splitting"
+    exit 0
+fi
+
+echo "Will split '$1' into $blocks parts"
+
+digits="${#blocks}"
+
+# Move file into directory of the same name as part 0
+printf -v file "%s/%0${digits}d" "$1" 0
+echo "Moving '$1' to '$file'"
+
+tmp="$(mktemp --dry-run --tmpdir="$(dirname "$1")")"
+mv "$1" "$tmp"
+mkdir "$1"
+mv "$tmp" "$file"
+
+# Use tail and truncate to split data off the end of the file
+for (( b=blocks-1; b > 0; b-- )); do
+    printf -v blockfile "%s/%0${digits}d" "$1" "$b"
+    offset=$((b * MAX_SIZE))
+    printf "Transferring bytes 0x%x-0x%x to '%s'\n" "$offset" "$size" "$blockfile"
+    blocksize=$((size-offset))
+    tail -c $blocksize "$file" > "$blockfile"
+    truncate -s $offset "$file"
+    size=$((size-blocksize))
+done
+
+echo "Done!"
