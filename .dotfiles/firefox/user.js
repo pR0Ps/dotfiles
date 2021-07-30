@@ -207,6 +207,8 @@ user_pref("dom.vr.enabled", false);
 
 // Disable all DRM content (EME = Encrypted Media Extensions)
 user_pref("media.eme.enabled", false);
+// Don't prompt to enable Widevine
+user_pref("media.gmp-widevinecdm.visible", false);
 
 // Disable access to low-level timing information
 user_pref("dom.enable_user_timing", false);
