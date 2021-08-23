@@ -102,9 +102,13 @@ set nowrap "Don't do it by default
 set linebreak "If wrapping, only break between words
 
 "Tab completion
-set wildmenu
-set wildmode=list:longest "bash-like shell completion style
-set wildignore+=*.sw[g-p],*.~,._*,__pycache__/*,*.egg-info/* "Ignore swap files and other garbage
+if has("wildmenu")
+  set wildmenu
+  set wildmode=list:longest "bash-like shell completion style
+
+  set wildignore+=*.sw[g-p],*.~,*._*,*/.DS_Store
+  set wildignore+=*.pyc,*/__pycache__/*,*.egg-info/*
+endif
 
 "Window UI
 set cursorline "Highight the current line
