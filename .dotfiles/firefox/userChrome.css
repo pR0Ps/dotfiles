@@ -1,17 +1,16 @@
 /* Customize the UI of Firefox */
 
 @-moz-document url("chrome://browser/content/browser.xhtml") {
-  /* Hide tabs in top bar */
-  #tabbrowser-tabs {
-    visibility: collapse !important;
-  }
-
   /*
-  Remove the TabsToolbar completely when not using it for the platform's window controls
-  Use the `browser.tabs.drawInTitlebar` setting in about:config to change this
+  Remove the TabsToolbar completely when not using it for the platform's window controls.
+  When using it for the window controls, only remove the section with tabs and buttons.
+  Use the `browser.tabs.inTitlebar` setting in about:config to change this (0=platform controls, 1=Firefox controls)
   */
-  #main-window:not([tabsintitlebar="true"]) #TabsToolbar #alltabs-button {
-    visibility: collapse !important;
+  #main-window[drawtitle="true"] #TabsToolbar {
+    display: none;
+  }
+  #main-window[tabsintitlebar="true"] #TabsToolbar-customization-target {
+    display: none;
   }
 
   /* Hide the sidebar header when it's showing tabs
@@ -27,6 +26,19 @@
 
   /* Allow edting the URL in bookmark popup UI */
   #editBMPanel_locationRow[collapsed="true"] {
-    visibility: visible !important;
+    visibility: visible;
+  }
+
+  /* Megabar: Hide lables ("Firefox Suggest", etc) */
+  .urlbarView-row[label]::before {
+    display: none !important;
+  }
+  .urlbarView-row[label] {
+    margin-block-start: 0 !important;
+  }
+
+  /* Megabar: Remove the "this time, search with:" text */
+  #urlbar .search-one-offs .search-panel-header {
+    display: none !important;
   }
 }

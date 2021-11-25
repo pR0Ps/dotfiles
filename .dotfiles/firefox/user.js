@@ -19,7 +19,7 @@ user_pref("browser.uidensity", 1);
 
 // Use the platform's native title bar
 // (This complements the addon + CSS tweaks that moves the tabs from the title bar into a sidebar)
-user_pref("browser.tabs.drawInTitlebar", false);
+user_pref("browser.tabs.inTitlebar", 0);
 
 // Display the URL exactly as it was entered (don't trim slashes, remove http, etc)
 user_pref("browser.urlbar.trimURLs", false);
