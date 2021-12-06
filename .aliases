@@ -30,6 +30,17 @@ alias wgetindex='wget --recursive --no-parent --reject "index.html*"'
 alias hstat='curl -o /dev/null --silent --head --write-out "%{http_code}\n"'
 alias htpasswd='printf "username: " && read -r u && [ -n "$u" ] && p="$(openssl passwd -apr1)" && printf "%s:%s\n" u p'
 
+# Allow quering the OS DNS cache
+if [ "$OSNAME" = "macOS" ]; then
+    getaddrinfo(){
+        dscacheutil -q host -a name "$1" | grep "_address" | cut --delimiter=' ' --fields=2 | sort --uniq
+    }
+else
+    getaddrinfo(){
+        getent ahosts "$1" | cut --delimiter=' ' --fields=1 | sort --uniq
+    }
+fi
+
 # Drop-in command upgrades
 __exists bat && alias cat='bat --style=plain --pager=never'
 __exists lsd && alias ls='lsd --icon=never'
