@@ -11,3 +11,12 @@ set colored-stats on
 # Display the current common prefix as a different color when autocompleting
 # Makes it much easier to see the options for next characters
 set colored-completion-prefix on
+
+# Don't make noise
+set bell-style none
+
+# Increase the number of completions to show (default 100)
+set completion-query-items 300
+
+# Note: ctrl+x, ctrl+e will allow for modifying the current line in $EDITOR
+# before running it.
