@@ -26,6 +26,12 @@ if __exists register-python-argcomplete && __exists pipx; then
     eval "$(register-python-argcomplete pipx)"
 fi
 
+# Clone SSH completions to ssh-when-up
+if ! complete -p ssh 2>/dev/null; then
+    _completion_loader ssh
+fi
+complete -F _ssh ssh-when-up
+
 # Set up fzf
 if __exists fzf; then
     [ -r /opt/local/share/fzf/shell/key-bindings.bash ] && . /opt/local/share/fzf/shell/key-bindings.bash

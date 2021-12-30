@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Wait for a host to be up (via pinging)
+# TODO: timeout
+
+set -eu
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $(basename "$0") <host>"
+    exit 1
+fi
+
+if ! ping -c 1 -W 1 "$1" >/dev/null; then
+    printf "Waiting for %s..." "$1" 1>&2
+    retry ping -c 1 -W 1 "$1" >/dev/null
+    printf "Done!\n" 1>&2
+fi

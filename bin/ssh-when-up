@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Wait for a host to be up (via pinging) before SSHing to it
+
+set -eu
+
+host="$(ssh -G "$@" | grep "^hostname " | cut -d " " -f 2)"
+
+wait-for-host "$host" && ssh "$@"
