@@ -7,14 +7,12 @@
 # Source global bashrc
 [ -r /etc/bashrc ] && . /etc/bashrc
 
-
 # Source history script and start a new session
 if [ -r ~/.histrc ]; then
     . ~/.histrc
     hist-new
     hist-load
 fi
-
 
 # Add completion for tools installed via MacPorts
 if [ "$OSNAME" = "macOS" ] && [ -r /opt/local/etc/profile.d/bash_completion.sh ]; then
@@ -75,7 +73,7 @@ PS1='\u@\h \w\$ '
 
 # Change prompt to something generic when recording asciicasts
 if ps -o command= $PPID | grep -q "asciinema rec"; then
-    PS1='ghost@ghost \w\$ '
+    PS1='ghost@ghost \$ '
 fi
 
 # Source aliases
