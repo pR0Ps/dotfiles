@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import sys
+import urllib.parse
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Decode URL-encoded strings to standard output"
+    )
+
+    parser.add_argument(
+        "urls",
+        nargs="*",
+        help="The URLs to process (default: read lines from stdin)"
+    )
+
+    args = parser.parse_args()
+
+    if not args.urls and not sys.stdin.isatty():
+        args.urls = sys.stdin.read().splitlines()
+
+    try:
+        for x in args.urls:
+            print(urllib.parse.unquote(x))
+        sys.stdout.flush()
+    except BrokenPipeError as e:
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        sys.exit(128 + 13) # SIGPIPE
