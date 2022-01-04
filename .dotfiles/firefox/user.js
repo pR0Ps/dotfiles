@@ -27,8 +27,17 @@ user_pref("browser.urlbar.trimURLs", false);
 // Force punycode for IDNs (mitigate domain spoofing attacks)
 user_pref("network.IDN_show_punycode", true);
 
-// Don't show search suggestions before history, bookmarks, etc
-user_pref("browser.urlbar.matchBuckets", "general:5,suggestion:Infinity");
+// Show 30 URL bar suggestions (default is 10)
+user_pref("browser.urlbar.maxRichResults", 30);
+
+// Enable basic offline unit converter in URL bar
+user_pref("browser.urlbar.unitConversion.enabled", true);
+
+// Reclassify and restyle search results in the history as search suggestions
+user_pref("browser.urlbar.restyleSearches", true);
+
+// Show search suggestions after history, bookmarks, etc
+user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
 
 // Don't suggest open tabs when typing in the URL bar
 // (replaced with the TabSearch addon)
@@ -109,6 +118,7 @@ user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", 
 // Disable sponsored searches in the URL bar
 user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
+user_pref("browser.urlbar.sponsoredTopSites", false);
 
 // Disable studies and experiments
 // Telemetry is left enabled since I want my usage to be represented in their
@@ -128,10 +138,12 @@ user_pref("network.captive-portal-service.enabled", false);
 user_pref("browser.fixup.alternate.enabled", false);
 user_pref("browser.fixup.hide_user_pass", true); // Don't send user:pass to guessed domains if guessing is enabled
 
-// Don't submit content typed in the URL/search bar to search engines automatically
+// Don't submit content typed in the URL/search bar to external sites automatically
 // (disables search suggestions)
 user_pref("browser.search.suggest.enabled", false);
+user_pref("browser.search.suggest.enabled.private", false);
 user_pref("browser.urlbar.suggest.searches", false);
+user_pref("browser.urlbar.quicksuggest.enabled", false);
 
 // Don't start loading pages before the user hits enter or clicks a link
 user_pref("browser.urlbar.speculativeConnect.enabled", false);
