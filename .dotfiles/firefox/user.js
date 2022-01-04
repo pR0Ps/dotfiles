@@ -76,6 +76,9 @@ user_pref("browser.startup.homepage", "about:blank");
 user_pref("browser.newtabpage.enabled", false);
 user_pref("browser.newtab.url", "about:blank");
 
+// Revove ad for Firefox VPN when opening a new private window
+user_pref("browser.privatebrowsing.vpnpromourl", "");
+
 
 // ----- Preference tweaks -----
 // Don't check if FF is the default browser
