@@ -34,6 +34,7 @@ Applications
 | [Hex Fiend](https://hexfiend.com/ ) | Hex editor |
 | [IINA](https://iina.io/) | Media player |
 | [iTerm2](https://iterm2.com/) | Terminal emulator |
+| [Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements) | Key remapping |
 | [MacVim](https://github.com/macvim-dev/macvim) | Text editor |
 | [Microsoft Remote Desktop](https://apps.apple.com/app/microsoft-remote-desktop/id1295203466) | RDP client |
 | [Sloth](https://sveinbjorn.org/sloth) | List open files and sockets of programs | |
