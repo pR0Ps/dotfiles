@@ -19,6 +19,9 @@ hs.loadSpoon("Caffeinate")
 -- Show a menubar icon for listing/ejecting disks
 hs.loadSpoon("DiskMenu")
 
+-- Show an alert when connecting an unknown charger
+hs.loadSpoon("ChargerNotify"):addKnownPSUs({"16974587"}):start()
+
 -- Window management
 hs.window.animationDuration = 0.05 --default is 0.2
 hs.loadSpoon("MiroWindowsManager"):bindHotkeys({
