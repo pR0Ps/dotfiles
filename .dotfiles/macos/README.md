@@ -37,6 +37,7 @@ Applications
 | [Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements) | Key remapping |
 | [MacVim](https://github.com/macvim-dev/macvim) | Text editor |
 | [Microsoft Remote Desktop](https://apps.apple.com/app/microsoft-remote-desktop/id1295203466) | RDP client |
+| [Moonlight](https://moonlight-stream.org/) | NVIDIA GameStream client |
 | [Sloth](https://sveinbjorn.org/sloth) | List open files and sockets of programs | |
 | [Smooze](https://smooze.co/ ) | Sane mouse support (extra buttons, better scrolling, etc)|
 | [Stats](https://github.com/exelban/stats) | Display system stats in the menu bar  |
