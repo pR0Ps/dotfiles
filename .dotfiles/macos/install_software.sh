@@ -48,9 +48,10 @@ sudo port install shellcheck  # A static analysis tool for shell scripts
 sudo port install git  # A fast version control system
 sudo port install python39 && sudo port select --set python python39 && sudo port select --set python3 python39  # An interpreted, object-oriented programming language
 pipx install virtualenv  # A more powerful version of the python venv module
-sudo port install nodejs15 npm7  # Evented I/O for V8 JavaScript + node package manager
+sudo port install nodejs17 yarn  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
+sudo port install cargo  # Cargo downloads your Rust project’s dependencies and compiles your project.
 
 # Set up ccache (from https://trac.macports.org/wiki/howto/ccache)
 sudo port install ccache  # object-file caching compiler wrapper
@@ -109,7 +110,6 @@ sudo port install megatools  # Command line client application for Mega.
 sudo port install terminal-notifier  # A command line tool to send Mac OS X user notifications
 sudo port install asciinema  # Record and share your terminal sessions, the right way
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
-sudo port install ntfs-3g  # Safe read/write NTFS driver for FUSE
 sudo port install taglib  # TagLib Audio Meta-Data Library
 pipx install crudini  # A utility for manipulating ini files
 go get go.universe.tf/netboot/cmd/pixiecore  # Quickly set up a PXE server
