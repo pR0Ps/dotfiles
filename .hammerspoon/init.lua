@@ -22,6 +22,9 @@ hs.loadSpoon("DiskMenu")
 -- Show an alert when connecting an unknown charger
 hs.loadSpoon("ChargerNotify"):addKnownPSUs({"16974587"}):start()
 
+-- Make clipboard contents available via a QR code
+hs.loadSpoon("ClipboardQRCode"):bindHotkeys({hyper, "q"})
+
 -- Window management
 hs.window.animationDuration = 0.05 --default is 0.2
 hs.loadSpoon("MiroWindowsManager"):bindHotkeys({

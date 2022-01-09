@@ -40,6 +40,7 @@ sudo port install p7zip  # 7-Zip implementation
 sudo port install jq  # Lightweight and flexible command-line JSON processor
 sudo port install progress  # Tool to show progress for cp, mv, dd, ...
 sudo port install pipx  # Execute binaries from Python packages in isolated environments
+sudo port install qrencode  # A fast and compact library for QR Code generation
 
 ## Development tools
 sudo port install clang-11  # C, C++, Objective C and Objective C++ compiler
