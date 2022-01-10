@@ -48,6 +48,7 @@ if [ "$OSNAME" = "macOS" ]; then
     __add_env_dir C_INCLUDE_PATH /opt/local/include
     __add_env_dir CPLUS_INCLUDE_PATH /opt/local/include
     __add_env_dir LIBRARY_PATH /opt/local/lib
+    __add_env_dir DYLD_FALLBACK_LIBRARY_PATH /opt/local/lib
 fi
 
 # Use vim by default
