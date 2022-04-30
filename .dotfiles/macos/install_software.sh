@@ -107,7 +107,6 @@ pipx install eyeD3  # MP3 ID3 tag viewing/editing
 
 ## Misc
 sudo port install openssh  # OpenSSH secure login server
-sudo port install youtube-dl  # Command-line program to download videos from YouTube.com and other sites
 sudo port install aria2  # Download utility with resuming and segmented downloading
 sudo port install megatools  # Command line client application for Mega.
 sudo port install terminal-notifier  # A command line tool to send Mac OS X user notifications
@@ -115,4 +114,5 @@ sudo port install asciinema  # Record and share your terminal sessions, the righ
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
 sudo port install taglib  # TagLib Audio Meta-Data Library
 pipx install crudini  # A utility for manipulating ini files
+pipx install yt-dlp  # command-line program to download videos from YouTube.com and other sites
 go get go.universe.tf/netboot/cmd/pixiecore  # Quickly set up a PXE server
