@@ -91,6 +91,9 @@ user_pref("browser.privatebrowsing.vpnpromourl", "");
 // Don't check if FF is the default browser
 user_pref("browser.shell.checkDefaultBrowser", false);
 
+// Don't show the "<site> is now full screen" warning
+user_pref("full-screen-api.warning.timeout", 0);
+
 // Don't show the picture-in-picture toggle
 // (still available on right-click or shift + right-click)
 user_pref("media.videocontrols.picture-in-picture.video-toggle.enabled", false);
