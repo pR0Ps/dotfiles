@@ -28,7 +28,7 @@ alias ta='tmux attach-session -t'
 alias metaflaclist='metaflac --list --block-type=VORBIS_COMMENT'
 alias wgetindex='wget --recursive --no-parent --reject "index.html*"'
 alias hstat='curl -o /dev/null --silent --head --write-out "%{http_code}\n"'
-alias htpasswd='printf "username: " && read -r u && [ -n "$u" ] && p="$(openssl passwd -apr1)" && printf "%s:%s\n" u p'
+alias htpasswd='printf "username: " && read -r u && [ -n "$u" ] && p="$(openssl passwd -apr1)" && printf "%s:%s\n" "$u" "$p"'
 
 # Allow quering the OS DNS cache
 if [ "$OSNAME" = "macOS" ]; then
