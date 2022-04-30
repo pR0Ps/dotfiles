@@ -62,6 +62,13 @@ user_pref("browser.bookmarks.showMobileBookmarks", true);
 // Always ask where to download files
 user_pref("browser.download.useDownloadDir", false);
 
+// Always ask to open or save files
+// (Also allows checking the filesize before starting the download)
+user_pref("browser.download.improvements_to_download_panel", false);
+
+// Don't automatically show the download popup when starting to download a file
+user_pref("browser.download.alwaysOpenPanel", false);
+
 // Don't add downloads to recent files
 user_pref("browser.download.manager.addToRecentDocs", false);
 
