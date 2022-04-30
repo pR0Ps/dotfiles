@@ -91,6 +91,8 @@ sudo port install iperf3  # Measures the maximum achievable bandwidth on IP netw
 sudo port install wget  # Internet file retriever
 sudo port install curl  # Tool for transferring files with URL syntax
 sudo port install wireshark3 && sudo dseditgroup -q -o edit -a "$(whoami)" -t user access_bpf  # Graphical network analyzer and capture tool + CLI utilities
+sudo port install dog  # dog is a command-line DNS client
+pipx install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
 
 sudo port install inetutils  # Inetutils is a collection of common network programs, including ftp, telnet, rsh, rlogin, tftp and the corresponding daemons.
 for x in ftp telnet tftp ping ping6; do sudo ln -s /opt/local/bin/g$x /opt/local/libexec/gnubin/$x; done  # add non-prefixed versions to the gnubin
