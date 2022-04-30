@@ -38,6 +38,8 @@ sudo port install htop  # Improved top
 sudo port install pv  # Monitor the progress of data through a pipe
 sudo port install p7zip  # 7-Zip implementation
 sudo port install jq  # Lightweight and flexible command-line JSON processor
+sudo port install fq # jq for binary formats
+sudo port install jless # A command-line pager for JSON data
 sudo port install progress  # Tool to show progress for cp, mv, dd, ...
 sudo port install pipx  # Execute binaries from Python packages in isolated environments
 sudo port install qrencode  # A fast and compact library for QR Code generation
