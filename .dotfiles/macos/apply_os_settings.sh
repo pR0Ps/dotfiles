@@ -234,3 +234,8 @@ defaults write com.apple.dock autohide -bool true
 
 # Disable icon hover zooming
 defaults write com.apple.dock magnification -bool false
+
+# Disable key repeat for AltTab
+# See https://github.com/lwouis/alt-tab-macos/issues/719#issuecomment-747176307
+defaults write com.lwouis.alt-tab-macos KeyRepeat 1000
+defaults write com.lwouis.alt-tab-macos InitialKeyRepeat 1000
