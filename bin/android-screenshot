@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -eu
+
+# will show an error and exit if there are no devices connected
+model="$(adb shell getprop ro.product.model)"
+
+# get the location of the normal screen shot folder on macos
+outdir=""
+if __exists defaults; then
+    outdir="$(defaults read com.apple.screencapture location)" || :
+fi
+if [ -z "$outdir" ]; then
+    outdir="."
+fi
+outdir="${outdir/#\~/$HOME}"
+
+# save the screenshot
+output_file="${outdir}/Screenshot_${model}_$(date +%Y-%m-%dT%H-%M-%S).png"
+adb exec-out screencap -p > "$output_file"
+
+echo "Saved to \"$output_file\""
