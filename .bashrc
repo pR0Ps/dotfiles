@@ -7,11 +7,9 @@
 # Source global bashrc
 [ -r /etc/bashrc ] && . /etc/bashrc
 
-# Source history script and start a new session
+# Source history script
 if [ -r ~/.histrc ]; then
     . ~/.histrc
-    hist-new
-    hist-load
 fi
 
 # Add completion for tools installed via MacPorts
@@ -25,7 +23,7 @@ if __exists register-python-argcomplete && __exists pipx; then
 fi
 
 # Clone SSH completions to ssh-when-up
-if ! complete -p ssh 2>/dev/null; then
+if ! complete -p ssh >/dev/null 2>/dev/null; then
     _completion_loader ssh
 fi
 complete -F _ssh ssh-when-up
@@ -66,9 +64,13 @@ if __exists fzf; then
     fi
 fi
 
-
 # When a program's output has no trailing newline show a red arrow and insert the newline
-PROMPT_COMMAND="printf '\033[31m⏎\033[0m%$((COLUMNS-1))s\r\033[K'${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+if echo "${PROMPT_COMMAND:-}" | grep --quiet ⏎; then
+    PROMPT_COMMAND="$(echo "$PROMPT_COMMAND" | sed -E "s/\[0m%[0-9]+s/\[0m%$((COLUMNS-1))s/")"
+else
+    PROMPT_COMMAND="printf '\033[31m⏎\033[0m%$((COLUMNS-1))s\r\033[K'${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+fi
+
 PS1='\u@\h \w\$ '
 
 # Change prompt to something generic when recording asciicasts

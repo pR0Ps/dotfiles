@@ -96,7 +96,9 @@ hist-switch(){
 export HISTDIR="$HOME/.bash_history.d"
 
 # Always append history after every command and on logout
-PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+if echo "${PROMPT_COMMAND:-}" | grep --quiet --invert-match "history -a"; then
+    PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+fi
 shopt -s histappend
 
 # Pruning
@@ -115,3 +117,9 @@ shopt -u lithist  # Prefer not using newlines to store history wherever possible
 # Safer history expansion
 set +H               # Disable by default
 shopt -s histverify  # Give a chance to edit history expansions before running them
+
+# Start a new history session if one hasn't already been started
+if echo "${HISTFILE:-}" | grep --quiet --invert-match "${HISTDIR}[0-9/-]\+.hist"; then
+    hist-new
+    hist-load
+fi
