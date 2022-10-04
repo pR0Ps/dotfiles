@@ -106,6 +106,12 @@ defaults write com.apple.dock mru-spaces -bool false
 # Don't group windows by application in Mission Control/Expose
 defaults write com.apple.dock expose-group-apps -bool false
 
+# Screenshot changes
+mkdir -p ~/Pictures/Screenshots
+defaults write com.apple.screencapture location ~/Pictures/Screenshots
+defaults write com.apple.screencapture disable-shadow -bool true  # Remove the drop shadow from window screenshots
+killall SystemUIServer  # apply changes
+
 ## Keyboard
 
 # Use function keys as function keys
