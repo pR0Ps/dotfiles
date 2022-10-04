@@ -33,7 +33,7 @@
 [pull]
     ff = only  # Don't merge or rebase by default when pulling
 [push]
-    default = simple
+    default = current
     followTags = true
 [rebase]
     autosquash = true
