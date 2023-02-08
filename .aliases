@@ -92,6 +92,7 @@ fi
 
 if __exists yt-dlp; then
     alias youtube-dl='yt-dlp'
+    alias yt-dlp-music='yt-dlp --add-metadata --write-thumbnail --extract-audio --format flac/bestaudio/best --output "%(artist,uploader|Unknown Artist)s/%(album,playlist|Unknown Album)s/%(track_number|0)02d - %(track,title|Unknown Track)s.%(ext)s"'
 fi
 
 # Use https://localhost.run to publicly serve a local HTTP port
