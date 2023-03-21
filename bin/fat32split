@@ -8,8 +8,11 @@ set -e
 
 MAX_SIZE=4294967295  # 2^32-1
 
-if [ $# -lt 1 ]; then
-    echo "ERROR: provide a file to split"
+if [ $# -ne 1 ]; then
+    echo "ERROR: provide a single file to split"
+    exit 1
+elif ! [ -f "$1" ]; then
+    echo "ERROR: '$1' is not a file"
     exit 1
 fi
 
