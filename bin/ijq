@@ -5,7 +5,16 @@
 # prints out the final expression when it exits.
 # See https://asciinema.org/a/349330 for a demo.
 
-# TODO: Better handling of piped input, multiple args, etc
+set -u
+
+# Read stdin into a temp file if data is provided via stdin
+if ! [ -t 0 ]; then
+    file="$(mktemp)"
+    trap 'rm -f "$file"' EXIT
+    cat > "$file"
+else
+    file="$1"
+fi
 
 cmds=(".")
 result=""
@@ -14,12 +23,14 @@ while true; do
         printf '%s\n' "${cmds[@]}" |\
         fzf --bind "tab:replace-query" --prompt="jq> " --query="$result"\
             --phony --print-query --tac --no-sort --preview-window "up:80%"\
-            --preview "jq -C {q} \"$1\""
+            --preview "jq -C {q} \"$file\""
     )"
 
-    # On error or ESC print the last query and exit
+    # On error or ESC print the last query to stderr and the last result to stdout
     if [ "$?" -gt 1 ]; then
-        echo "jq '${cmds[${#cmds[@]}-1]}' \"$1\""
+        cmd="${cmds[${#cmds[@]}-1]}"
+        echo "jq '$cmd'" >&2
+        jq "$cmd" "$file"
         exit 0
     fi
 
