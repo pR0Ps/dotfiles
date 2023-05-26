@@ -249,9 +249,6 @@ user_pref("accessibility.force_disabled", 1);
 // Disable WebRTC
 user_pref("media.peerconnection.enabled", false);
 
-// Disable WebSockets
-user_pref("network.websocket.max-connections", 0);
-
 // Disable sending beacons and pings
 user_pref("beacon.enabled", false);
 user_pref("browser.send_pings", false);
