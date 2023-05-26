@@ -86,6 +86,9 @@ user_pref("browser.newtab.url", "about:blank");
 // Revove ad for Firefox VPN when opening a new private window
 user_pref("browser.privatebrowsing.vpnpromourl", "");
 
+// Remove full-screen overlay ad (wtf?!) for Firefox VPN
+// ref: https://bugzilla.mozilla.org/show_bug.cgi?id=1835182
+user_pref("browser.vpn_promo.enabled", false);
 
 // ----- Preference tweaks -----
 // Don't check if FF is the default browser
