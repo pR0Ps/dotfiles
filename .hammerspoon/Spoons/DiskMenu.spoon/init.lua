@@ -21,7 +21,7 @@ obj.menubar = nil
 function obj:humanSize(bytes)
   if bytes ~= nil then
     local units = {'B', 'KB', 'MB', 'GB', 'TB', 'PB'}
-    local power = math.floor(math.log(bytes, 1024))
+    local power = bytes ~= 0 and math.floor(math.log(math.abs(bytes), 1024)) or 0
     return string.format("%.1f " .. units[power + 1], bytes/(1024^power))
   else
     return "??"
