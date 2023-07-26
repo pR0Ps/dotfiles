@@ -116,6 +116,7 @@ sudo port install terminal-notifier  # A command line tool to send Mac OS X user
 sudo port install asciinema  # Record and share your terminal sessions, the right way
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
 sudo port install taglib  # TagLib Audio Meta-Data Library
+sudo port install macfuse && sudo ln -fsn /opt/local/Library/Filesystems/macfuse.fs /Library/Filesystems/macfuse.fs  # FUSE for macOS
 pipx install crudini  # A utility for manipulating ini files
 pipx install yt-dlp  # command-line program to download videos from YouTube.com and other sites
 go get go.universe.tf/netboot/cmd/pixiecore  # Quickly set up a PXE server
