@@ -1,0 +1,27 @@
+*.c     diff=cpp
+*.h     diff=cpp
+*.c++   diff=cpp
+*.h++   diff=cpp
+*.cpp   diff=cpp
+*.hpp   diff=cpp
+*.cc    diff=cpp
+*.hh    diff=cpp
+
+*.css   diff=css
+*.html  diff=html
+*.xhtml diff=html
+
+*.go    diff=golang
+*.php   diff=php
+*.py    diff=python
+*.md    diff=markdown
+*.rb    diff=ruby
+*.rake  diff=ruby
+*.rs    diff=rust
+*.java  diff=java
+
+*.pdf   diff=exif
+*.png   diff=exif
+*.jpg   diff=exif
+*.jpeg  diff=exif
+*.gif   diff=exif

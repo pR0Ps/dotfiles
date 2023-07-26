@@ -5,8 +5,10 @@
     autosquash = !GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash
     diffc = diff --cached
     fixup = commit --fixup
+    fixupnow = !ref=$(git show-ref --head --hash "$1") && git fixup "$ref" && git autosquash "${ref}^1" && :
     plog = log --graph --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
     merged = !git branch --merged master | grep -v master
+    branchr = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
 
     # Interactively pick commit sha(s)
     isha = !git rev-parse && git log --pretty=oneline | fzf --with-nth 2.. --multi --no-sort --preview='git show --color=always {1}' | cut -d' ' -f1
@@ -17,9 +19,17 @@
 [diff]
     algorithm = histogram  # Slightly slower for large diffs, but generally more readable
     submodule = log  # Show a log of added/removed commits for a changed submodule
+[diff "exif"]  # add a exif info diff handler
+      binary = true
+      textconv = exiftool
 [fetch]
     prune = true
     pruneTags = true
+[filter "lfs"]
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
 [init]
     defaultBranch = master
 [log]
