@@ -56,6 +56,7 @@ sudo port install nodejs19 npm9 yarn  # Evented I/O for V8 JavaScript + JavaScri
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
 sudo port install cargo  # Cargo downloads your Rust project’s dependencies and compiles your project.
+cargo install cargo-update  # Allows updating all installed Rust packages using `cargo install-update --all`
 
 # Set up ccache (from https://trac.macports.org/wiki/howto/ccache)
 sudo port install ccache  # object-file caching compiler wrapper
@@ -117,6 +118,7 @@ sudo port install asciinema  # Record and share your terminal sessions, the righ
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
 sudo port install taglib  # TagLib Audio Meta-Data Library
 sudo port install macfuse && sudo ln -fsn /opt/local/Library/Filesystems/macfuse.fs /Library/Filesystems/macfuse.fs  # FUSE for macOS
+cargo install hexyl  # A command-line hex viewer
 pipx install crudini  # A utility for manipulating ini files
 pipx install yt-dlp  # command-line program to download videos from YouTube.com and other sites
 go get go.universe.tf/netboot/cmd/pixiecore  # Quickly set up a PXE server
