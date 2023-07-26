@@ -43,6 +43,7 @@ sudo port install jless # A command-line pager for JSON data
 sudo port install progress  # Tool to show progress for cp, mv, dd, ...
 sudo port install pipx  # Execute binaries from Python packages in isolated environments
 sudo port install qrencode  # A fast and compact library for QR Code generation
+sudo port install tmux  # terminal multiplexer
 
 ## Development tools
 sudo port install clang-11  # C, C++, Objective C and Objective C++ compiler
