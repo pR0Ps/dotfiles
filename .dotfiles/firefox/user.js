@@ -239,9 +239,8 @@ user_pref("media.eme.enabled", false);
 user_pref("media.gmp-widevinecdm.visible", false);
 
 // Disable access to low-level timing information
-user_pref("dom.enable_user_timing", false);
 user_pref("dom.enable_performance", false);
-user_pref("dom.enable_resource_timing", false);
+//user_pref("dom.enable_resource_timing", false);  // left enabled in order to make Cloudflare-protected sites work
 
 // Prevent accessibility services from accessing the browser
 user_pref("accessibility.force_disabled", 1);
