@@ -18,5 +18,8 @@ set bell-style none
 # Increase the number of completions to show (default 100)
 set completion-query-items 300
 
+# Bind ctrl+J to an action that surrounds the line with "$()"
+Control-j: "\C-a$(\C-e)"
+
 # Note: ctrl+x, ctrl+e will allow for modifying the current line in $EDITOR
 # before running it.
