@@ -44,6 +44,7 @@ fi
 # Drop-in command upgrades
 __exists bat && alias cat='bat --style=plain --pager=never'
 __exists lsd && alias ls='lsd --icon=never'
+__exists tre && alias tree='tre'
 
 # Grep within python files
 if __exists rg; then
