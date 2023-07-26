@@ -50,7 +50,7 @@ sudo port install clang-11  # C, C++, Objective C and Objective C++ compiler
 sudo port install cmake  # Cross-platform make
 sudo port install shellcheck  # A static analysis tool for shell scripts
 sudo port install git  # A fast version control system
-sudo port install python3 && sudo port select --set python python310 && sudo port select --set python3 python10  # An interpreted, object-oriented programming language
+sudo port install python3 && sudo port select --set python python311 && sudo port select --set python3 python11  # An interpreted, object-oriented programming language
 pipx install virtualenv  # A more powerful version of the python venv module
 sudo port install nodejs19 npm9 yarn  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
