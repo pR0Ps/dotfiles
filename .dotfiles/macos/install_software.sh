@@ -12,7 +12,7 @@ fi
 
 ## Upgrade bash
 sudo port install bash bash-completion
-echo "/opt/local/bin/bash" | sudo tee -a /etc/shells >/dev/null
+grep --quiet "/opt/local/bin/bash" /etc/shells || echo "/opt/local/bin/bash" | sudo tee -a /etc/shells >/dev/null
 chsh -s "/opt/local/bin/bash"
 
 ## Package managers and installers
@@ -42,22 +42,23 @@ sudo port install htop  # Improved top
 sudo port install pv  # Monitor the progress of data through a pipe
 sudo port install p7zip  # 7-Zip implementation
 sudo port install jq  # Lightweight and flexible command-line JSON processor
-sudo port install fq # jq for binary formats
-sudo port install jless # A command-line pager for JSON data
+sudo port install fq  # jq for binary formats
+sudo port install jless  # A command-line pager for JSON data
+sudo port install gron  # Make JSON greppable!
 sudo port install progress  # Tool to show progress for cp, mv, dd, ...
 sudo port install qrencode  # A fast and compact library for QR Code generation
 sudo port install tmux  # terminal multiplexer
 cargo install tre-command  # Tree command, improved
 
 ## Development tools
-sudo port install clang-11  # C, C++, Objective C and Objective C++ compiler
+sudo port install clang-16  # C, C++, Objective C and Objective C++ compiler
 sudo port install cmake  # Cross-platform make
 sudo port install shellcheck  # A static analysis tool for shell scripts
 sudo port install git  # A fast version control system
 sudo port install git-lfs  # Git Large File Storage
-sudo port install python3 && sudo port select --set python python311 && sudo port select --set python3 python11  # An interpreted, object-oriented programming language
+sudo port install python311 && sudo port select --set python python311 && sudo port select --set python3 python311 && python3 -m ensurepip  # An interpreted, object-oriented programming language
 pipx install virtualenv  # A more powerful version of the python venv module
-sudo port install nodejs19 npm9 yarn  # Evented I/O for V8 JavaScript + JavaScript dependency manager
+sudo port install nodejs19 npm9  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
 
@@ -81,7 +82,7 @@ sudo sed -i -e 's/.*configureccache\s.*$/configureccache yes/' /opt/local/etc/ma
     -or -name "clang++-mp*" -or -name "clang-mp*" -or -name "clang++" -or -name "clang" \) | \
     grep -E -v "cmake*|ccache*|ccomps*|c\+\+filt*" | \
   while read -r file; do
-    sudo ln -s "${ccache_bin}" "${dest_links}/$(basename "$file")"
+    sudo ln -sf "${ccache_bin}" "${dest_links}/$(basename "$file")"
   done
 )
 
@@ -91,7 +92,7 @@ sudo port install nmap  # Port scanning utility for large networks
 sudo port install rsync  # Fast incremental file transfer
 sudo port install rclone  # Rclone is a command line cloud-service sync program
 sudo port install socat  # netcat on steroids
-sudo port install bandwhich  # Terminal bandwidth utilization tool
+cargo install bandwhich  # Terminal bandwidth utilization tool
 sudo port install iperf3  # Measures the maximum achievable bandwidth on IP network
 sudo port install wget  # Internet file retriever
 sudo port install curl  # Tool for transferring files with URL syntax
@@ -100,7 +101,7 @@ sudo port install dog  # dog is a command-line DNS client
 pipx install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
 
 sudo port install inetutils  # Inetutils is a collection of common network programs, including ftp, telnet, rsh, rlogin, tftp and the corresponding daemons.
-for x in ftp telnet tftp ping ping6; do sudo ln -s /opt/local/bin/g$x /opt/local/libexec/gnubin/$x; done  # add non-prefixed versions to the gnubin
+for x in ftp telnet tftp ping ping6; do sudo ln -sf /opt/local/bin/g$x /opt/local/libexec/gnubin/$x; done  # add non-prefixed versions to the gnubin
 
 ## Media manipulation
 sudo port install exiftool  # General command line utility to read, write and edit EXIF metadata
@@ -119,9 +120,10 @@ sudo port install megatools  # Command line client application for Mega.
 sudo port install terminal-notifier  # A command line tool to send Mac OS X user notifications
 sudo port install asciinema  # Record and share your terminal sessions, the right way
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
+sudo port install md5deep  # Recursively compute digests on files/directories
 sudo port install taglib  # TagLib Audio Meta-Data Library
 sudo port install macfuse && sudo ln -fsn /opt/local/Library/Filesystems/macfuse.fs /Library/Filesystems/macfuse.fs  # FUSE for macOS
+sudo port install e2fsprogs  # Utilities for use with the ext2, ext3 and ext4 filesystems
 cargo install hexyl  # A command-line hex viewer
 pipx install crudini  # A utility for manipulating ini files
 pipx install yt-dlp  # command-line program to download videos from YouTube.com and other sites
-go get go.universe.tf/netboot/cmd/pixiecore  # Quickly set up a PXE server
