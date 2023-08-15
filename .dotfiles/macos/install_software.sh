@@ -96,7 +96,7 @@ cargo install bandwhich  # Terminal bandwidth utilization tool
 sudo port install iperf3  # Measures the maximum achievable bandwidth on IP network
 sudo port install wget  # Internet file retriever
 sudo port install curl  # Tool for transferring files with URL syntax
-sudo port install wireshark3 && sudo dseditgroup -q -o edit -a "$(whoami)" -t user access_bpf  # Graphical network analyzer and capture tool + CLI utilities
+sudo port install wireshark4 && sudo dseditgroup -q -o edit -a "$(whoami)" -t user access_bpf  # Graphical network analyzer and capture tool + CLI utilities
 sudo port install dog  # dog is a command-line DNS client
 pipx install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
 

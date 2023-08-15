@@ -19,6 +19,7 @@ Applications
 | [360Controller](https://github.com/360Controller/360Controller)| Xbox controller driver |
 | [Alfred](https://www.alfredapp.com/) | Spotlight replacement |
 | [AltTab](https://github.com/lwouis/alt-tab-macos) | Sane cmd+tab switcher |
+| [Android File Transfer](https://www.android.com/filetransfer/) | Basic MTP client |
 | [Android Studio](https://developer.android.com/studio) | Android development IDE |
 | [Cyberduck](https://cyberduck.io/) | File transfer client |
 | [Day-O](https://shauninman.com/archive/2016/10/20/day_o_2_mac_menu_bar_clock) | Adds a clock + calendar to the menu bar |
@@ -34,17 +35,18 @@ Applications
 | [Hex Fiend](https://hexfiend.com/ ) | Hex editor |
 | [IINA](https://iina.io/) | Media player |
 | [iTerm2](https://iterm2.com/) | Terminal emulator |
+| [Kap](https://github.com/wulkano/kap) | Screen recorder |
 | [Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements) | Key remapping |
+| [LinearMouse](https://linearmouse.app/ ) | Sane mouse support (extra buttons, better scrolling, etc) |
 | [MacVim](https://github.com/macvim-dev/macvim) | Text editor |
 | [Microsoft Remote Desktop](https://apps.apple.com/app/microsoft-remote-desktop/id1295203466) | RDP client |
 | [Moonlight](https://moonlight-stream.org/) | NVIDIA GameStream client |
 | [Sloth](https://sveinbjorn.org/sloth) | List open files and sockets of programs |
-| [Smooze](https://smooze.co/ ) | Sane mouse support (extra buttons, better scrolling, etc) |
 | [Stats](https://github.com/exelban/stats) | Display system stats in the menu bar |
 | [Syncthing](https://syncthing.net/) | Sync files |
 | [Tor Browser](https://www.torproject.org/) | Onion browser |
 | [Transmission](https://transmissionbt.com/) | Torrent client |
-| [VirtualBox](https://www.virtualbox.org/) | Run VMs |
+| [UTM](https://getutm.app/) | Run virtual machines |
 | [VLC](https://www.videolan.org/) | Media player |
 | [WebTorrent](https://webtorrent.io/) | Torrent client (supports WebRTC) |
 | [Wireguard](https://apps.apple.com/app/wireguard/id1441195209) | Secure tunnels |
