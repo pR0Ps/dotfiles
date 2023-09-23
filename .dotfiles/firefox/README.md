@@ -37,6 +37,5 @@ these are the essential extensions I would manually install.
 | [cliget](https://addons.mozilla.org/firefox/addon/cliget) | Generates `curl`/`wget`/`aria2` commands for downloading files |
 | [Firefox Translations](https://addons.mozilla.org/firefox/addon/firefox-translations/) | Provide inline webpage translation (without using an external service)
 | [Sidebery](https://addons.mozilla.org/firefox/addon/sidebery) | Displays tabs vertically as a tree in the sidebar |
-| [TabSearch](https://addons.mozilla.org/firefox/addon/tab_search) | Allows jumping between tabs by searching |
 | [Temporary Containers](https://addons.mozilla.org/firefox/addon/temporary-containers) | Easy disposable isolated tabs (like private windows) |
 | [uBlock Origin](https://addons.mozilla.org/firefox/addon/ublock-origin) | Blocks unwanted content |

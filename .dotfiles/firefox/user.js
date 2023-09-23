@@ -40,7 +40,7 @@ user_pref("browser.urlbar.restyleSearches", true);
 user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
 
 // Don't suggest open tabs when typing in the URL bar
-// (replaced with the TabSearch addon)
+// (replaced with Sidebery's tab search feature)
 user_pref("browser.urlbar.suggest.openpage", false);
 
 // Don't suggest popular websites just because they're popular
