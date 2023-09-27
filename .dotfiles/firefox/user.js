@@ -83,6 +83,9 @@ user_pref("browser.startup.homepage", "about:blank");
 user_pref("browser.newtabpage.enabled", false);
 user_pref("browser.newtab.url", "about:blank");
 
+// Disable "what's new" tab after updating
+user_pref("browser.startup.homepage_override.mstone", "ignore");
+
 // Revove ad for Firefox VPN when opening a new private window
 user_pref("browser.privatebrowsing.vpnpromourl", "");
 
