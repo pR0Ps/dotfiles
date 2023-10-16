@@ -26,7 +26,6 @@ Applications
 | [Discord](https://discord.com/) | Chat |
 | [Docker](https://www.docker.com/) | Run containers |
 | [Enjoy2](https://github.com/fyhuang/enjoy2) | Controller -> keyboard mapper |
-| [FinderPath](https://bahoom.com/finderpath/) | Put the current path in the Finder bar |
 | [Firefox Developer Edition](https://www.mozilla.org/firefox/new/) | Browser |
 | [gfxCardStatus](https://gfx.io/) | Integrated/dedicated GPU monitoring and control |
 | [GIMP](https://www.gimp.org/) | Image editor |
