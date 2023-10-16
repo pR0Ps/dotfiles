@@ -25,18 +25,14 @@ end
 
 
 function obj:batteryChangedCallback()
-    -- some PSUs provide psuSerial, others provide psuSerialString
-    psuSerial = hs.battery.psuSerial()
-    if psuSerial == 0 then
-      psuSerial = hs.battery.psuSerialString()
-    else
-      psuSerial = tostring(psuSerial)
-    end
+    psuSerial = hs.battery.adapterSerialNumber()
 
     -- unplugged/unknown
-    if psuSerial == "" then
+    if psuSerial == nil then
       return
     end
+
+    psuSerial = tostring(psuSerial)
 
     -- PSUs can randomly disconnect and reconnect for some reason
     -- Only show warnings if the PSU is different from the last one connected
