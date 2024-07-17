@@ -75,6 +75,9 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 // Don't hide entries in the download actions when a file isn't associated with anything
 user_pref("browser.download.hide_plugins_without_extensions", false);
 
+// Don't automatically close the browser if the last tab is closed
+user_pref("browser.tabs.closeWindowWithLastTab", false);
+
 // Set startup page (0=blank, 1=home, 2=last visited page, 3=resume previous session)
 user_pref("browser.startup.page", 3);
 user_pref("browser.startup.homepage", "about:blank");
