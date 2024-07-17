@@ -142,6 +142,9 @@ user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 user_pref("browser.urlbar.sponsoredTopSites", false);
 
+// Disable ad measurement
+user_pref("dom.private-attribution.submission.enabled", false);
+
 // Disable studies and experiments
 // Telemetry is left enabled since I want my usage to be represented in their
 // collected data. However, I'm not comfortable with my browser running random
