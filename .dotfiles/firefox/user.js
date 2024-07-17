@@ -185,6 +185,9 @@ user_pref("network.http.referer.XOriginPolicy", 1);
 // Display true origin of permission prompts (don't allow sites to delegate to iframe/other)
 user_pref("permissions.delegation.enabled", false);
 
+// Don't guess favicon URLs
+user_pref("browser.chrome.guess_favicon", false);
+
 
 // ----- Security -----
 // Don't allow being MITM'd by Microsoft's Family Safety system
