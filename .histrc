@@ -12,6 +12,22 @@ hist-new(){
     export HISTFILE="$HISTDIR/$(date -u "+%Y/%m/%d/%H-%M-%S-%N").hist"
     mkdir --parents "$(dirname "$HISTFILE")"
     touch "$HISTFILE"
+
+    # add to current sessions
+    echo "$HISTFILE" >> "${HISTDIR}/sessions"
+}
+
+hist-exit(){
+    # remove from current sessions
+    local db="${HISTDIR}/sessions"
+    if [ -e "$db" ] &&  ! [ "${HISTFILE:-}" = "" ]; then
+        local tmp=$(mktemp --tmpdir="$HISTDIR")
+        if grep --invert-match "$HISTFILE" < "$db" > "$tmp"; then
+            mv "$tmp" "$db"
+        else
+            rm "$tmp"
+        fi
+    fi
 }
 
 hist-show(){
@@ -123,3 +139,4 @@ if echo "${HISTFILE:-}" | grep --quiet --invert-match "${HISTDIR}[0-9/-]\+.hist"
     hist-new
     hist-load
 fi
+trap hist-exit EXIT
