@@ -5,10 +5,15 @@
     autosquash = !GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash
     diffc = diff --cached
     fixup = commit --fixup
-    fixupnow = !ref=$(git show-ref --head --hash "$1") && git fixup "$ref" && git autosquash "${ref}^1" && :
+    fixupnow = !bash -c \"git fixup "${1}" && git autosquash "${1}~1"\"
+    ifixup = !git commit --fixup "$(git isha)"
+    ifixupnow = !git fixupnow "$(git isha)"
     plog = log --graph --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
-    merged = !git branch --merged master | grep -v master
+    merged = !git branch --merged "$(git obranch)" | grep -v "$(git obranch)"
     branchr = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
+
+    # get the default branch name from the origin
+    obranch = !bash -c \"(git cat-file -e origin/HEAD 2>/dev/null || git remote set-head origin --auto >/dev/null) && git rev-parse --abbrev-ref origin/HEAD | cut -b8-\"
 
     # Interactively pick commit sha(s)
     isha = !git rev-parse && git log --pretty=oneline | fzf --with-nth 2.. --multi --no-sort --preview='git show --color=always {1}' | cut -d' ' -f1
