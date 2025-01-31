@@ -6,10 +6,10 @@
   When using it for the window controls, only remove the section with tabs and buttons.
   Use the `browser.tabs.inTitlebar` setting in about:config to change this (0=platform controls, 1=Firefox controls)
   */
-  #main-window[drawtitle="true"] #TabsToolbar {
+  #main-window[drawtitle] #TabsToolbar {
     display: none;
   }
-  #main-window[tabsintitlebar="true"] #TabsToolbar-customization-target {
+  #main-window[customtitlebar] #TabsToolbar-customization-target {
     display: none;
   }
 
