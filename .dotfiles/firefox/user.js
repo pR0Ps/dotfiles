@@ -257,9 +257,6 @@ user_pref("dom.enable_performance", false);
 // Prevent accessibility services from accessing the browser
 user_pref("accessibility.force_disabled", 1);
 
-// Disable WebRTC
-user_pref("media.peerconnection.enabled", false);
-
 // Disable sending beacons and pings
 user_pref("beacon.enabled", false);
 user_pref("browser.send_pings", false);
