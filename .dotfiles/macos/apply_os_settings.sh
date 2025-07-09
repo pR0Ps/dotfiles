@@ -89,6 +89,9 @@ defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 # Zoom on double clicking a window's title bar
 defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"  # sic
 
+# Always show scroll bars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
@@ -116,6 +119,9 @@ killall SystemUIServer  # apply changes
 
 # Use function keys as function keys
 defaults write NSGlobalDomain com.apple.keyboard.fnState -int 1
+# Make the fn key do nothing (except allow for using F keys as fuctions)
+# 0=do nothing, 1=change input source, 2=show emoji and symbols, 3=start dictation
+defaults write com.apple.HIToolbox AppleFnUsageType -int 0
 
 # Disable auto-correct and other annoying features
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
@@ -204,6 +210,9 @@ defaults write com.apple.finder AppleShowAllFiles -bool true
 # Show filename extensions and disable warnings for changing them
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# Show full paths in title
+#defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
 # When performing a search, search the current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
