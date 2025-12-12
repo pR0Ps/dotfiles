@@ -6,7 +6,7 @@
   When using it for the window controls, only remove the section with tabs and buttons.
   Use the `browser.tabs.inTitlebar` setting in about:config to change this (0=platform controls, 1=Firefox controls)
   */
-  #main-window[drawtitle] #TabsToolbar {
+  #main-window:not([customtitlebar]) #TabsToolbar {
     display: none;
   }
   #main-window[customtitlebar] #TabsToolbar-customization-target {
@@ -25,8 +25,8 @@
   }
 
   /* Allow edting the URL in bookmark popup UI */
-  #editBMPanel_locationRow[collapsed="true"] {
-    visibility: visible;
+  .editBMPanel_locationRow {
+    display: unset !important;
   }
 
   /* Megabar: Hide lables ("Firefox Suggest", etc) */
