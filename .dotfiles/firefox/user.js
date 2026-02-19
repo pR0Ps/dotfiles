@@ -17,6 +17,9 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 // Compact UI (smaller back button, etc)
 user_pref("browser.uidensity", 1);
 
+// Use the older sidebar UI
+user_pref("sidebar.revamp", false);
+
 // Use the platform's native title bar
 // (This complements the addon + CSS tweaks that moves the tabs from the title bar into a sidebar)
 user_pref("browser.tabs.inTitlebar", 0);
