@@ -42,17 +42,6 @@ sudo pmset -a acwake 0
 
 ## General
 
-# Disable Gatekeeper (allow unsigned applications to run without manual approval)
-sudo spctl --master-disable
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-# Disable the certificate revocation check when launching an application
-if ! grep -q "127\.0\.0\.1 ocsp.apple.com" /etc/hosts; then
-    echo -e '# Block certificate revocation checking\n127.0.0.1 ocsp.apple.com' | sudo tee -a /etc/hosts >/dev/null
-    sudo dscacheutil -flushcache
-    sudo killall -HUP mDNSResponder
-fi
-
 # Set up Samba auto-mount system
 if [ ! -f /etc/auto_smb ]; then
   echo "
