@@ -62,6 +62,7 @@ pipx install virtualenv  # A more powerful version of the python venv module
 sudo port install nodejs22 npm11  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
+sudo port install openjdk21-temurin  # Eclipse Temurin, based on OpenJDK 22
 
 # Set up ccache (from https://trac.macports.org/wiki/howto/ccache)
 sudo port install ccache  # object-file caching compiler wrapper
