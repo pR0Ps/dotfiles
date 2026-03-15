@@ -30,10 +30,6 @@ sudo port install gmake  # GNU make
 
 ## Essential shell tools
 sudo port install moreutils  # A collection of the unix tools that nobody thought to write thirty years ago.
-sudo port install lsd  # An ls clone with colors
-sudo port install bat  # A cat clone with extra features
-sudo port install fd  # A alternative to "find"
-sudo port install ripgrep  # An alternative to "grep"
 sudo port install fzf  # Command-line fuzzy finder written in Go
 sudo port install tree  # Display directories as trees (with optional color/HTML output) 
 sudo port install watch  # Executes a program periodically, showing output fullscreen
@@ -43,12 +39,17 @@ sudo port install pv  # Monitor the progress of data through a pipe
 sudo port install p7zip  # 7-Zip implementation
 sudo port install jq  # Lightweight and flexible command-line JSON processor
 sudo port install fq  # jq for binary formats
-sudo port install jless  # A command-line pager for JSON data
 sudo port install gron  # Make JSON greppable!
 sudo port install progress  # Tool to show progress for cp, mv, dd, ...
 sudo port install qrencode  # A fast and compact library for QR Code generation
 sudo port install tmux  # terminal multiplexer
+cargo install bat  # A cat(1) clone with wings.
+cargo install fd-find  # A simple, fast and user-friendly alternative to 'find'
+cargo install lsd  # The next gen ls command
+cargo install ripgrep  # ripgrep recursively searches directories for a regex pattern while respecting your gitignore
 cargo install tre-command  # Tree command, improved
+cargo install jless   # A command-line pager for JSON data
+cargo install du-dust  # A more intuitive version of du in rust
 
 ## Development tools
 sudo port install clang-16  # C, C++, Objective C and Objective C++ compiler
