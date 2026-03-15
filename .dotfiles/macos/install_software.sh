@@ -57,9 +57,9 @@ sudo port install cmake  # Cross-platform make
 sudo port install shellcheck  # A static analysis tool for shell scripts
 sudo port install git  # A fast version control system
 sudo port install git-lfs  # Git Large File Storage
-sudo port install python311 && sudo port select --set python python311 && sudo port select --set python3 python311 && python3 -m ensurepip  # An interpreted, object-oriented programming language
+sudo port install python314 && sudo port select --set python python314 && sudo port select --set python3 python314 && python3 -m ensurepip  # An interpreted, object-oriented programming language
 pipx install virtualenv  # A more powerful version of the python venv module
-sudo port install nodejs19 npm9  # Evented I/O for V8 JavaScript + JavaScript dependency manager
+sudo port install nodejs22 npm11  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
 
