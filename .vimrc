@@ -400,7 +400,7 @@ let g:matchup_text_obj_enabled = 1 "Enable text objects (ie. i% and a% )
 "}}
 "----Airline - https://github.com/bling/vim-airline
 "Provides better window chrome (status line, tab list, etc)
-let g:airline_powerline_fonts = 1 "Disable this if the terminal/gui font doesn't have powerline symbols
+let g:airline_powerline_fonts = 0 "Disable this if the terminal/gui font doesn't have powerline symbols
 let g:airline_extensions = ['syntastic', 'tabline']
 let g:airline#extensions#tabline#fnamemod = ':p:~:.'
 let g:airline#extensions#tabline#show_buffers = 1
