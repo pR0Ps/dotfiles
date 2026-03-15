@@ -20,6 +20,11 @@ export GOPATH="$HOME/.go"
 export GOBIN="$GOPATH/bin"
 [ -d "$GOBIN" ] || mkdir -p "$GOBIN"
 
+# Run ~/.pythonrc on Python repl start
+if [ -r "$HOME/.pythonrc" ]; then
+    export PYTHONSTARTUP="$HOME/.pythonrc"
+fi
+
 # Helper function for adding dirs to environment variables
 __add_env_dir(){
     if [ -d "$2" ]; then
