@@ -108,7 +108,7 @@ for x in ftp telnet tftp ping ping6; do sudo ln -sf /opt/local/bin/g$x /opt/loca
 sudo port install exiftool  # General command line utility to read, write and edit EXIF metadata
 sudo port install ffmpeg +nonfree  # FFmpeg is a complete solution to play, record, convert and stream audio and video.
 sudo port install imagemagick  # Tools and libraries to manipulate images in many formats
-sudo port install mkvtoolnix -qtgui  # Matroska media files manipulation tools.
+sudo port install mkvtoolnix -qtgui  # Matroska media files manipulation tools (no GUI)
 sudo port install flac  # Free Lossless Audio Codec
 sudo port install pngcrush  # optimizer for PNG files
 sudo port install gifsicle  # GIF image/animation creator/editor
@@ -123,7 +123,6 @@ sudo port install asciinema  # Record and share your terminal sessions, the righ
 sudo port install fatsort  # Utility to sort FAT12, FAT16 and FAT32 partitions
 sudo port install md5deep  # Recursively compute digests on files/directories
 sudo port install taglib  # TagLib Audio Meta-Data Library
-sudo port install macfuse && sudo ln -fsn /opt/local/Library/Filesystems/macfuse.fs /Library/Filesystems/macfuse.fs  # FUSE for macOS
 sudo port install e2fsprogs  # Utilities for use with the ext2, ext3 and ext4 filesystems
 cargo install hexyl  # A command-line hex viewer
 pipx install crudini  # A utility for manipulating ini files
