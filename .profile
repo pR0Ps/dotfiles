@@ -83,5 +83,5 @@ elif [ "$OSNAME" = "Linux" ]; then
     export XDG_CONFIG_DIRS="/etc/xdg/"
     export XDG_DATA_DIRS="/usr/local/share/:/usr/share/"
 fi
-# Use the same local config directory on every OS
 export XDG_CONFIG_HOME="$HOME/.config/"
+export XDG_BIN_HOME="$HOME/bin/"
