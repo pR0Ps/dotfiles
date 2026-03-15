@@ -17,6 +17,8 @@
 
     # Interactively pick commit sha(s)
     isha = !git rev-parse && git log --pretty=oneline | fzf --with-nth 2.. --multi --no-sort --preview='git show --color=always {1}' | cut -d' ' -f1
+[branch]
+    sort = -committerdate  # sort branches most recent commit first
 [color "status"]
     untracked = cyan
 [commit]
@@ -24,9 +26,13 @@
 [diff]
     algorithm = histogram  # Slightly slower for large diffs, but generally more readable
     submodule = log  # Show a log of added/removed commits for a changed submodule
+    colorMoved = default  # mark up moved code differently than added/removed
+    renames = true  # detect if a file has been renamed
+    mnemonicPrefix = true  # use [i]ndex, [w]orking dir, [c]ommit in diff headers instead of a/b
+    context = 10  # add more context in diffs
 [diff "exif"]  # add a exif info diff handler
-      binary = true
-      textconv = exiftool
+    binary = true
+    textconv = exiftool
 [fetch]
     prune = true
     pruneTags = true
@@ -43,16 +49,20 @@
     # Use a diff3-styled vimdiff
     guitool = gvimdiff3
     tool = vimdiff3
+    conflictStyle = zdiff3
 [mergetool]
     prompt = false
 [pull]
     ff = only  # Don't merge or rebase by default when pulling
 [push]
-    default = current
-    followTags = true
+    # keep default push mode, but automatically set up tracking
+    default = simple
+    autoSetupRemote = true
 [rebase]
-    autosquash = true
-    autostash = true
+    autoSquash = true
+    autoStash = true
+    updateRefs = true  # auto-update refs when rebasing - good for stacked branches
+    missingCommitsCheck = warn
 [rerere]
     autoUpdate = true
     enabled = true
@@ -62,6 +72,10 @@
     submoduleSummary = true
 [submodule]
     recurse = true
+[tag]
+    sort = version:refname  # sort tags as versions
+[transfer]
+    fsckObjects = true  # detect data corruption
 [user]
     email = carey@cmetcalfe.ca
     name = Carey Metcalfe
