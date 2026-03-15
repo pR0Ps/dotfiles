@@ -99,6 +99,8 @@ sudo port install wget  # Internet file retriever
 sudo port install curl  # Tool for transferring files with URL syntax
 sudo port install wireshark4 && sudo dseditgroup -q -o edit -a "$(whoami)" -t user access_bpf  # Graphical network analyzer and capture tool + CLI utilities
 uv tool install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
+uv tool install zipstream-ng  # Quick http server with zip support
+uv tool install yq  # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
 
 sudo port install inetutils  # Inetutils is a collection of common network programs, including ftp, telnet, rsh, rlogin, tftp and the corresponding daemons.
 for x in ftp telnet tftp ping ping6; do sudo ln -sf /opt/local/bin/g$x /opt/local/libexec/gnubin/$x; done  # add non-prefixed versions to the gnubin
