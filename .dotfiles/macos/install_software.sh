@@ -18,7 +18,7 @@ chsh -s "/opt/local/bin/bash"
 ## Package managers and installers
 sudo port install cargo  # Cargo downloads your Rust project’s dependencies and compiles your project.
 cargo install cargo-update  # Allows updating all installed Rust packages using `cargo install-update --all`
-sudo port install pipx  # Execute binaries from Python packages in isolated environments
+cargo install uv  # A Python package and project manager
 
 ## GNU replacements for built-in utils
 sudo port install coreutils  # GNU coreutils
@@ -58,7 +58,6 @@ sudo port install shellcheck  # A static analysis tool for shell scripts
 sudo port install git  # A fast version control system
 sudo port install git-lfs  # Git Large File Storage
 sudo port install python314 && sudo port select --set python python314 && sudo port select --set python3 python314 && python3 -m ensurepip  # An interpreted, object-oriented programming language
-pipx install virtualenv  # A more powerful version of the python venv module
 sudo port install nodejs22 npm11  # Evented I/O for V8 JavaScript + JavaScript dependency manager
 sudo port install android-platform-tools  # Platform-Tools for Google Android SDK (adb and fastboot)
 sudo port install go  # compiled, garbage-collected, concurrent programming language developed by Google Inc
@@ -99,7 +98,7 @@ sudo port install iperf3  # Measures the maximum achievable bandwidth on IP netw
 sudo port install wget  # Internet file retriever
 sudo port install curl  # Tool for transferring files with URL syntax
 sudo port install wireshark4 && sudo dseditgroup -q -o edit -a "$(whoami)" -t user access_bpf  # Graphical network analyzer and capture tool + CLI utilities
-pipx install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
+uv tool install mitmproxy  # SSL/TLS-capable man-in-the-middle proxy for HTTP and Websockets
 
 sudo port install inetutils  # Inetutils is a collection of common network programs, including ftp, telnet, rsh, rlogin, tftp and the corresponding daemons.
 for x in ftp telnet tftp ping ping6; do sudo ln -sf /opt/local/bin/g$x /opt/local/libexec/gnubin/$x; done  # add non-prefixed versions to the gnubin
@@ -112,7 +111,7 @@ sudo port install mkvtoolnix -qtgui  # Matroska media files manipulation tools (
 sudo port install flac  # Free Lossless Audio Codec
 sudo port install pngcrush  # optimizer for PNG files
 sudo port install gifsicle  # GIF image/animation creator/editor
-pipx install eyeD3  # MP3 ID3 tag viewing/editing
+uv tool install eyeD3  # MP3 ID3 tag viewing/editing
 
 ## Misc
 sudo port install openssh  # OpenSSH secure login server
@@ -125,5 +124,5 @@ sudo port install md5deep  # Recursively compute digests on files/directories
 sudo port install taglib  # TagLib Audio Meta-Data Library
 sudo port install e2fsprogs  # Utilities for use with the ext2, ext3 and ext4 filesystems
 cargo install hexyl  # A command-line hex viewer
-pipx install crudini  # A utility for manipulating ini files
-pipx install yt-dlp  # command-line program to download videos from YouTube.com and other sites
+uv tool install crudini  # A utility for manipulating ini files
+uv tool install yt-dlp  # command-line program to download videos from YouTube.com and other sites

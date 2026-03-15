@@ -20,11 +20,13 @@ mkdir -p "$venvdir"
 tmp=$(mktemp --tmpdir="$venvdir" --directory "venv-XXX")
 trap 'rm -rf "$tmp"' EXIT
 
-# Prefer virtualenv (faster, compatible with python2),
+# Prefer uv (faster),
+# fall back to virtualenv (compatible with python2),
 # fall back to python with isolation (python3.4+),
 # fall back to non-isolated python,
 # Otherwise error out
-virtualenv --quiet --python "$python" "$tmp" &>/dev/null || \
+uv venv --quiet --no-project --seed --python "$python" "$tmp" || \
+    virtualenv --quiet --python "$python" "$tmp" &>/dev/null || \
     "$python" -I -m venv "$tmp" &>/dev/null || \
     "$python" -m venv "$tmp" &>/dev/null || \
     { echo "Failed to create venv with interpreter $python"; exit 1; }
