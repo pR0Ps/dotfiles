@@ -128,3 +128,4 @@ sudo port install e2fsprogs  # Utilities for use with the ext2, ext3 and ext4 fi
 cargo install hexyl  # A command-line hex viewer
 uv tool install crudini  # A utility for manipulating ini files
 uv tool install yt-dlp  # command-line program to download videos from YouTube.com and other sites
+sudo port install tk  # Tcl Tool Kit (fixes running 'gitk' and other Tk-based applications)
