@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$#" -lt 1 ]; then
+if [ "$#" -lt 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     echo "Write a disk image to a bootable USB on macOS"
     echo ""
     echo "Usage: $(basename "$0") <iso file> [diskname]"
