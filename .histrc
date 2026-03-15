@@ -3,6 +3,7 @@
 # History management
 
 hist-new(){
+    local db="${HISTDIR}/sessions"
 
     # Flush current history and clear it
     history -a
@@ -14,19 +15,30 @@ hist-new(){
     touch "$HISTFILE"
 
     # add to current sessions
-    echo "$HISTFILE" >> "${HISTDIR}/sessions"
+    echo "$HISTFILE" >> "$db"
 }
 
 hist-exit(){
-    # remove from current sessions
     local db="${HISTDIR}/sessions"
-    if [ -e "$db" ] &&  ! [ "${HISTFILE:-}" = "" ]; then
-        local tmp=$(mktemp --tmpdir="$HISTDIR")
-        if grep --invert-match "$HISTFILE" < "$db" > "$tmp"; then
-            mv "$tmp" "$db"
-        else
-            rm "$tmp"
-        fi
+    if ! [ -e "${HISTFILE:-}" ]; then
+        # no histfile - nothing to do
+        return 0
+    elif ! [ -s "$HISTFILE" ]; then
+        # empty histfile - delete
+        rm "$HISTFILE"
+    fi
+
+    if ! [ -r "$db" ] || ! [ -s "$db" ]; then
+        # empty/unreadable DB - nothing to do
+        return 0
+    fi
+
+    # remove current histfile from DB
+    local tmp=$(mktemp --tmpdir="$HISTDIR")
+    if grep --invert-match "$HISTFILE" "$db" > "$tmp"; then
+        mv --force "$tmp" "$db"
+    else
+        rm "$tmp"
     fi
 }
 
@@ -68,6 +80,37 @@ hist-load(){
     rm "$tmp"
 }
 
+hist-restore-start(){
+    # copy the session db to a new file
+    # used for restoring sessions after an abnormal exit
+    local db="${HISTDIR}/sessions"
+    local dbr="${db}.restore"
+    if [ -r "$db" ] && [ -s "$db" ] && ! [ -r "$dbr" ]; then
+        cp --update=all "$db" "$dbr"
+        echo "Starting restore process - copied sessions DB"
+        echo "Use 'hist-restore' to start popping sessions out of it"
+    fi
+}
+
+hist-restore(){
+    # pop sessions out of restore file until it's empty
+    if ! __exists truncate; then
+        echo "ERR: truncate is required, install gnu coreutils"
+        return 1
+    fi
+    local dbr="${HISTDIR}/sessions.restore"
+    if ! [ -s "$dbr" ]; then
+        echo "No sessions to restore"
+        echo "Use hist-restore-start to start the restore process"
+        return 0
+    fi
+
+    # pop last line from file, clean up DB if empty
+    session="$(tail -n 1 "$dbr" | tee >(wc --bytes | xargs -I {} truncate "$dbr" --size -{}))"
+    ! [ -s "$dbr" ] && rm "$dbr"
+    hist-switch "$session"
+}
+
 if __exists rg; then
     hist-search(){
         rg --no-heading --no-line-number --color=always --sort path "$@" "$HISTDIR" |\
@@ -93,6 +136,7 @@ __hist_switch_complete(){
 complete -o default -F __hist_switch_complete "hist-switch"
 
 hist-switch(){
+    local db="${HISTDIR}/sessions"
     if [ ! -r "$1" ]; then
         echo "Unable to find history session '$1'"
         return 1
@@ -103,8 +147,14 @@ hist-switch(){
 
     # Flush current history, switch HISTFILE, load history from that session and previous
     history -a
+    hist-exit
     export HISTFILE="$1"
     hist-load "$1"
+
+    # add to current sessions (if not already there)
+    if ! grep --quiet "$HISTFILE" "$db"; then
+        echo "$HISTFILE" >> "$db"
+    fi
 }
 
 
