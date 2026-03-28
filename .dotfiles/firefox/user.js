@@ -67,7 +67,7 @@ user_pref("browser.download.useDownloadDir", false);
 
 // Always ask to open or save files
 // (Also allows checking the filesize before starting the download)
-user_pref("browser.download.improvements_to_download_panel", false);
+user_pref("browser.download.always_ask_before_handling_new_types", true);
 
 // Don't automatically show the download popup when starting to download a file
 user_pref("browser.download.alwaysOpenPanel", false);
